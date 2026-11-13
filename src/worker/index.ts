@@ -26,13 +26,19 @@ const app = new Hono<{ Bindings: Env }>();
 const APP_ORIGIN_HOST = "app.avallen.studio";
 
 app.all("*", async (c) => {
-	const res = await c.env.ASSETS.fetch(c.req.raw);
-	if (res.status !== 404) return res;
+	try {
+		const res = await c.env.ASSETS.fetch(c.req.raw);
+		if (res.status !== 404) return res;
 
-	const url = new URL(c.req.url);
-	url.protocol = "https:";
-	url.hostname = APP_ORIGIN_HOST;
-	return fetch(new Request(url.toString(), c.req.raw));
+		const url = new URL(c.req.url);
+		url.protocol = "https:";
+		url.hostname = APP_ORIGIN_HOST;
+		return await fetch(new Request(url.toString(), c.req.raw));
+	} catch (err) {
+		// Temporary: surface the exception so the apex cutover can be debugged.
+		const detail = err instanceof Error ? `${err.message}\n${err.stack ?? ""}` : String(err);
+		return new Response(`apex proxy error: ${detail}`, { status: 500 });
+	}
 });
 
 export default app;
