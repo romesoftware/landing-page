@@ -15,8 +15,8 @@ const app = new Hono<{ Bindings: Env }>();
  *
  * Requires wrangler.json assets.not_found_handling = "none" (SPA fallback
  * would serve index.html for every path and the proxy would never fire).
- * app.avallen.studio must stay DNS-only (grey cloud) - Workers can't fetch
- * a hostname in their own zone through the proxy.
+ * The `app` record may stay proxied; fetching a different same-zone
+ * hostname from a Worker is fine (verified live).
  */
 const APP_ORIGIN_HOST = "app.avallen.studio";
 
