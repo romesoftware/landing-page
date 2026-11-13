@@ -20,6 +20,19 @@ const app = new Hono<{ Bindings: Env }>();
  */
 const APP_ORIGIN_HOST = "app.avallen.studio";
 
+// The PWA's real service worker lives on app.avallen.studio. On this origin,
+// /sw.js proxies like any other path - which would let proxied vanity pages
+// register the app SW at scope "/" and serve cached app shell over the
+// marketing pages. Serve an unregister+purge script instead: it also cleans
+// up legacy apex SWs installed before the cutover.
+app.get("/sw.js", () => {
+	const killer = `self.addEventListener('install',()=>self.skipWaiting());
+self.addEventListener('activate',()=>{self.registration.unregister();caches.keys().then(k=>Promise.all(k.map(caches.delete)))});`;
+	return new Response(killer, {
+		headers: { "Content-Type": "application/javascript", "Cache-Control": "no-store" },
+	});
+});
+
 app.all("*", (c) => {
 	const url = new URL(c.req.url);
 	url.protocol = "https:";
