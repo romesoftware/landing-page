@@ -1,4 +1,4 @@
-import { useEffect, useState, type ReactNode } from 'react'
+import { useEffect, useRef, useState, type ReactNode } from 'react'
 
 type IconName =
   | 'arrow'
@@ -36,23 +36,17 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Logo({ light = false }: { light?: boolean }) {
   return (
     <a className={`logo ${light ? 'logo--light' : ''}`} href="#top" aria-label="Avallen home">
-      <img src={light ? '/logo-light.svg' : '/logo.svg'} alt="Avallen" />
+      <img className="logo__mark" src={light ? '/logo-light.png' : '/logo.png'} alt="" />
+      <span className="logo__word">Avallen</span>
     </a>
   )
 }
 
-function LeafMark() {
-  return (
-    <svg viewBox="0 0 40 40" aria-hidden="true">
-      <g fill="none" stroke="currentColor" strokeWidth="1.7">
-        <path d="M20 21 C12 17 5 18 3 27 C12 30 18 27 20 21 Z" fill="currentColor" stroke="none" />
-        <path d="M20 21 C28 17 35 18 37 27 C28 30 22 27 20 21 Z" fill="currentColor" stroke="none" />
-        <circle cx="20" cy="20" r="3" fill="currentColor" stroke="none" />
-        <path d="M7 18 A14 14 0 0 1 33 14" strokeDasharray="0.5 4" strokeLinecap="round" />
-      </g>
-    </svg>
-  )
+function BrandMark({ light = false }: { light?: boolean }) {
+  return <img className="brand-mark" src={light ? '/logo-light.png' : '/logo.png'} alt="" aria-hidden="true" />
 }
+
+const API_BASE = 'https://api.avallen.studio/api'
 
 const teacherFeatures = [
   { icon: 'calendar' as const, title: 'Classes, without the clutter', text: 'Create one-off sessions or recurring classes, manage spaces and keep your whole schedule in view.' },
@@ -92,15 +86,69 @@ function PhoneMockup() {
   )
 }
 
+type Avail = 'idle' | 'checking' | 'free' | 'taken' | 'invalid'
+
+type Claim = { state: 'idle' | 'submitting' | 'done' | 'error'; message: string }
+
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
   const [openQuestion, setOpenQuestion] = useState<number | null>(0)
+
+  // "Reserve your URL" form
+  const [handle, setHandle] = useState('')
+  const [avail, setAvail] = useState<Avail>('idle')
+  const [claimName, setClaimName] = useState('')
+  const [claimEmail, setClaimEmail] = useState('')
+  const [claimPhone, setClaimPhone] = useState('')
+  const [claimCompany, setClaimCompany] = useState('') // honeypot
+  const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
+  const checkTimer = useRef<number | undefined>(undefined)
 
   useEffect(() => {
     const close = () => setMenuOpen(false)
     window.addEventListener('resize', close)
     return () => window.removeEventListener('resize', close)
   }, [])
+
+  // Live availability check, debounced while they type.
+  useEffect(() => {
+    window.clearTimeout(checkTimer.current)
+    if (!handle) { setAvail('idle'); return }
+    if (!/^[a-z0-9-]{3,40}$/.test(handle)) { setAvail('invalid'); return }
+    setAvail('checking')
+    checkTimer.current = window.setTimeout(async () => {
+      try {
+        const res = await fetch(`${API_BASE}/handles/${handle}`)
+        // 200 = taken, 404 = free; anything else (429/5xx) is unknown - don't block the submit
+        setAvail(res.status === 404 ? 'free' : res.ok ? 'taken' : 'idle')
+      } catch {
+        setAvail('idle') // offline/API down - the submit still validates server-side
+      }
+    }, 400)
+    return () => window.clearTimeout(checkTimer.current)
+  }, [handle])
+
+  const submitClaim = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (claim.state === 'submitting') return
+    setClaim({ state: 'submitting', message: '' })
+    try {
+      const res = await fetch(`${API_BASE}/handle-claims`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: claimName, email: claimEmail, handle, phone: claimPhone || undefined, company: claimCompany }),
+      })
+      if (res.ok) {
+        setClaim({ state: 'done', message: '' })
+        setAvail('idle')
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setClaim({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong — try again' })
+      }
+    } catch {
+      setClaim({ state: 'error', message: 'Could not reach the server — try again in a moment' })
+    }
+  }
 
   return (
     <div id="top">
@@ -157,7 +205,7 @@ function App() {
 
         <section className="matrix-section">
           <div className="shell">
-            <div className="section-heading section-heading--dark"><div><p className="eyebrow">A closer look</p><h2>Everything that comes<br /><em>inside.</em></h2></div><p>No add-on marketplace, no tiered feature gates. The whole toolkit, in one place.</p></div>
+            <div className="section-heading section-heading--dark"><div><p className="eyebrow">A closer look</p><h2>The complete<br /><em>toolkit.</em></h2></div><p>No add-on marketplace, no tiered feature gates. The whole toolkit, in one place.</p></div>
             <div className="matrix-grid">
               {([
                 ['Plan & run', ['Recurring classes & one-off sessions', 'Retreats with deposits & split payments', 'Venues, photos & private-location handling', 'Registers, student notes & attendance']],
@@ -191,7 +239,7 @@ function App() {
           <div className="shell">
             <div className="student-heading"><div><p className="eyebrow">For students, too</p><h2>Find a practice<br /><em>that feels like yours.</em></h2></div><p>Avallen makes it easier to discover independent teachers, book a class nearby, and keep coming back to the people and places you love.</p></div>
             <div className="student-layout">
-              <div className="class-card"><div className="class-card__image"><img src="https://images.unsplash.com/photo-1651077920873-ac1be1b82290?auto=format&fit=crop&w=1000&q=88" alt="A small independent yoga class" /><button aria-label="Save class"><Icon name="heart" size={19} /></button><span>4 spots left</span></div><div className="class-card__body"><small>VINYASA FLOW</small><div><h3>Slow Sunday Flow</h3><strong>$18</strong></div><p>with Maya Chen · Wild Bloom Studio</p><hr /><p><b>Sun, 9:30 AM</b> · 60 min · 0.8 mi</p></div></div>
+              <div className="class-card"><div className="class-card__image"><img src="https://images.unsplash.com/photo-1651077920873-ac1be1b82290?auto=format&fit=crop&w=1000&q=88" alt="A small independent yoga class" /><button aria-label="Save class"><Icon name="heart" size={19} /></button><span>4 spots left</span></div><div className="class-card__body"><small>VINYASA FLOW</small><div><h3>Slow Sunday Flow</h3><strong>£18</strong></div><p>with Maya Chen · Wild Bloom Studio</p><hr /><p><b>Sun, 9:30 AM</b> · 60 min · 0.8 mi</p></div></div>
               <div className="student-benefits">
                 {[['01', 'Discover local, independent teachers', 'Search by practice, place and time—not by who has the biggest marketing budget.'], ['02', 'Book without the back-and-forth', 'Clear class details, simple booking and everything you need before you arrive.'], ['03', 'Return to what you love', 'Save favourites, see your upcoming bookings and build a practice that lasts.']].map(([num, title, text]) => <article key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
               </div>
@@ -207,7 +255,7 @@ function App() {
           <div className="shell founder-grid">
             <div className="founder-photo" aria-label="Portrait of Rob Foster, founder of Avallen">
               <span className="founder-photo__monogram">RF</span>
-              <div className="founder-photo__badge"><span><LeafMark /></span></div>
+              <div className="founder-photo__badge"><span><BrandMark light /></span></div>
             </div>
             <div className="founder-copy">
               <p className="section-number">03 — MADE BY A PERSON, NOT A PLATFORM</p>
@@ -219,13 +267,59 @@ function App() {
           </div>
         </section>
 
+        <section className="reserve-section" id="reserve">
+          <div className="shell">
+            <div className="reserve-card">
+              <div className="reserve-copy">
+                <p className="section-number">04 — CLAIM YOUR SPOT</p>
+                <h2>Reserve your<br /><em>URL now.</em></h2>
+                <p>Every teacher gets a public page at <b>avallen.studio/you</b> — searchable, shareable, and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
+                <p>Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
+              </div>
+              {claim.state === 'done' ? (
+                <div className="reserve-done" role="status">
+                  <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
+                  <h3>You’re on the list.</h3>
+                  <p><b>avallen.studio/{handle}</b> is reserved for you.<br />We’ll be in touch as soon as we launch.</p>
+                </div>
+              ) : (
+                <form className="reserve-form" onSubmit={submitClaim}>
+                  <label className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
+                    <span className="url-field__prefix">avallen.studio/</span>
+                    <input
+                      type="text" inputMode="url" autoComplete="off" spellCheck={false}
+                      placeholder="yourname" value={handle} required
+                      onChange={e => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40))}
+                    />
+                    <span className={`url-field__status url-field__status--${avail}`} aria-live="polite">
+                      {avail === 'checking' && '…'}
+                      {avail === 'free' && <><Icon name="check" size={14} /> available</>}
+                      {avail === 'taken' && <><Icon name="x" size={14} /> taken</>}
+                      {avail === 'invalid' && '3+ chars: a-z, 0-9, -'}
+                    </span>
+                  </label>
+                  <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
+                  <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
+                  <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
+                  <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
+                  <input type="text" name="company" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
+                  {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
+                  <button className="pill" type="submit" disabled={claim.state === 'submitting' || avail === 'taken' || avail === 'invalid' || !handle}>
+                    {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
+                  </button>
+                </form>
+              )}
+            </div>
+          </div>
+        </section>
+
         <section className="faq-section" id="faq">
-          <div className="shell faq-grid"><div><p className="section-number">04 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
+          <div className="shell faq-grid"><div><p className="section-number">05 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
         </section>
 
         <section className="coming-section" id="coming-soon">
           <div className="coming-shape coming-shape--one" /><div className="coming-shape coming-shape--two" />
-          <div className="shell coming-inner"><div className="app-mark"><LeafMark /></div><p className="eyebrow eyebrow--light">A calmer way to run your practice</p><h2>Move with purpose.<br /><em>Teach freely.</em></h2><p>Avallen is coming soon to the App Store.<br />We can’t wait to share it with you.</p><div className="store-badge"><span>●</span><div><small>COMING SOON ON THE</small><strong>App Store</strong></div></div></div>
+          <div className="shell coming-inner"><div className="app-mark"><BrandMark light /></div><p className="eyebrow eyebrow--light">A calmer way to run your practice</p><h2>Move with purpose.<br /><em>Teach freely.</em></h2><p>Avallen is coming soon to the App Store.<br />We can’t wait to share it with you.</p><div className="store-badge"><span>●</span><div><small>COMING SOON ON THE</small><strong>App Store</strong></div></div></div>
         </section>
       </main>
 
