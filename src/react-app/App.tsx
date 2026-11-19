@@ -152,11 +152,28 @@ function ScrollStory() {
   const stepsRef = useRef<(HTMLElement | null)[]>([])
 
   useEffect(() => {
-    const obs = new IntersectionObserver(entries => {
-      entries.forEach(e => { if (e.isIntersecting) setActive(Number((e.target as HTMLElement).dataset.step)) })
-    }, { rootMargin: '-45% 0px -45% 0px' })
-    stepsRef.current.forEach(el => el && obs.observe(el))
-    return () => obs.disconnect()
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const mid = window.innerHeight / 2
+      let best = 0, bestDist = Infinity
+      stepsRef.current.forEach((el, i) => {
+        if (!el) return
+        const r = el.getBoundingClientRect()
+        const d = Math.abs(r.top + r.height / 2 - mid)
+        if (d < bestDist) { bestDist = d; best = i }
+      })
+      setActive(best)
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
   }, [])
 
   return (
