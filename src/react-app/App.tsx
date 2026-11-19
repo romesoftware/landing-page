@@ -102,6 +102,7 @@ function App() {
   const [claimPhone, setClaimPhone] = useState('')
   const [claimCompany, setClaimCompany] = useState('') // honeypot
   const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
+  const [modalItems, setModalItems] = useState<string[] | null>(null) // missing-field modal
   const checkTimer = useRef<number | undefined>(undefined)
 
   useEffect(() => {
@@ -131,6 +132,17 @@ function App() {
   const submitClaim = async (e: React.FormEvent) => {
     e.preventDefault()
     if (claim.state === 'submitting') return
+
+    // Polite modal for anything missing, instead of browser tooltips.
+    const missing: string[] = []
+    if (!claimName.trim()) missing.push('your name')
+    if (!claimEmail.trim()) missing.push('an email address')
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(claimEmail.trim())) missing.push('a valid email address')
+    if (!handle) missing.push('the handle you’d like')
+    else if (avail === 'invalid') missing.push('a handle of 3+ letters, numbers or hyphens')
+    else if (avail === 'taken') missing.push('a handle that’s still free — try another')
+    if (missing.length) { setModalItems(missing); return }
+
     setClaim({ state: 'submitting', message: '' })
     try {
       const res = await fetch(`${API_BASE}/handle-claims`, {
@@ -283,12 +295,12 @@ function App() {
                   <p><b>avallen.studio/{handle}</b> is reserved for you.<br />We’ll be in touch as soon as we launch.</p>
                 </div>
               ) : (
-                <form className="reserve-form" onSubmit={submitClaim}>
-                  <label className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
+                <form className="reserve-form" onSubmit={submitClaim} noValidate>
+                  <div className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
                     <span className="url-field__prefix">avallen.studio/</span>
                     <input
                       type="text" inputMode="url" autoComplete="off" spellCheck={false}
-                      placeholder="yourname" value={handle} required
+                      placeholder="yourname" value={handle} required aria-label="Your handle"
                       onChange={e => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40))}
                     />
                     <span className={`url-field__status url-field__status--${avail}`} aria-live="polite">
@@ -297,14 +309,14 @@ function App() {
                       {avail === 'taken' && <><Icon name="x" size={14} /> taken</>}
                       {avail === 'invalid' && '3+ chars: a-z, 0-9, -'}
                     </span>
-                  </label>
+                  </div>
                   <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
                   <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
                   <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
                   <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
                   <input type="text" name="company" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
                   {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
-                  <button className="pill" type="submit" disabled={claim.state === 'submitting' || avail === 'taken' || avail === 'invalid' || !handle}>
+                  <button className="pill" type="submit" disabled={claim.state === 'submitting'}>
                     {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
                   </button>
                 </form>
@@ -312,6 +324,19 @@ function App() {
             </div>
           </div>
         </section>
+
+        {modalItems && (
+          <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Missing details" onClick={() => setModalItems(null)}>
+            <div className="modal-card" onClick={e => e.stopPropagation()}>
+              <button className="modal-card__close" aria-label="Close" onClick={() => setModalItems(null)}><Icon name="x" size={16} /></button>
+              <span className="modal-card__icon"><Icon name="spark" size={18} /></span>
+              <h3>Nearly there</h3>
+              <p>To hold your URL we just need:</p>
+              <ul>{modalItems.map(item => <li key={item}>{item}</li>)}</ul>
+              <button className="pill pill--small" onClick={() => setModalItems(null)}>Got it</button>
+            </div>
+          </div>
+        )}
 
         <section className="faq-section" id="faq">
           <div className="shell faq-grid"><div><p className="section-number">05 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
