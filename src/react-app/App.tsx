@@ -104,6 +104,8 @@ function App() {
   const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
   const [modalItems, setModalItems] = useState<string[] | null>(null) // missing-field modal
   const checkTimer = useRef<number | undefined>(undefined)
+  const modalRef = useRef<HTMLDivElement>(null)
+  const submitRef = useRef<HTMLButtonElement>(null)
 
   useEffect(() => {
     const close = () => setMenuOpen(false)
@@ -128,6 +130,18 @@ function App() {
     }, 400)
     return () => window.clearTimeout(checkTimer.current)
   }, [handle])
+
+  // Move focus into the modal when it opens, back to the button when it closes.
+  useEffect(() => {
+    if (modalItems) {
+      modalRef.current?.focus()
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalItems(null) }
+      window.addEventListener('keydown', onKey)
+      return () => window.removeEventListener('keydown', onKey)
+    }
+  }, [modalItems])
+
+  const closeModal = () => { setModalItems(null); submitRef.current?.focus() }
 
   const submitClaim = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -316,7 +330,7 @@ function App() {
                   <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
                   <input type="text" name="company" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
                   {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
-                  <button className="pill" type="submit" disabled={claim.state === 'submitting'}>
+                  <button className="pill" type="submit" ref={submitRef} disabled={claim.state === 'submitting'}>
                     {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
                   </button>
                 </form>
@@ -326,14 +340,14 @@ function App() {
         </section>
 
         {modalItems && (
-          <div className="modal-backdrop" role="dialog" aria-modal="true" aria-label="Missing details" onClick={() => setModalItems(null)}>
-            <div className="modal-card" onClick={e => e.stopPropagation()}>
-              <button className="modal-card__close" aria-label="Close" onClick={() => setModalItems(null)}><Icon name="x" size={16} /></button>
+          <div className="modal-backdrop" onClick={closeModal}>
+            <div className="modal-card" role="dialog" aria-modal="true" aria-label="Missing details" tabIndex={-1} ref={modalRef} onClick={e => e.stopPropagation()}>
+              <button className="modal-card__close" aria-label="Close" onClick={closeModal}><Icon name="x" size={16} /></button>
               <span className="modal-card__icon"><Icon name="spark" size={18} /></span>
               <h3>Nearly there</h3>
               <p>To hold your URL we just need:</p>
               <ul>{modalItems.map(item => <li key={item}>{item}</li>)}</ul>
-              <button className="pill pill--small" onClick={() => setModalItems(null)}>Got it</button>
+              <button className="pill pill--small" onClick={closeModal}>Got it</button>
             </div>
           </div>
         )}
