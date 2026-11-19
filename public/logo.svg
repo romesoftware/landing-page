@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 40" width="160" height="40">
+  <!-- Avallen wordmark logo - sage mark with slate text -->
+  <g>
+    <!-- Mark (sage green) -->
+    <g fill="#8C9B7E" transform="translate(0, 0)">
+      <path d="M20 21 C12 17 5 18 3 27 C12 30 18 27 20 21 Z"/>
+      <path d="M20 21 C28 17 35 18 37 27 C28 30 22 27 20 21 Z"/>
+      <circle cx="20" cy="20" r="3"/>
+      <path d="M7 18 A14 14 0 0 1 33 14" fill="none" stroke="#8C9B7E"
+            stroke-width="1.6" stroke-linecap="round" stroke-dasharray="0.5 5"/>
+    </g>
+    <!-- Wordmark (slate) - Lora-style serif -->
+    <text x="44" y="28" font-family="Lora, Georgia, serif" font-size="22" font-weight="500" fill="#2B3B47" letter-spacing="0.02em">Avallen</text>
+  </g>
+</svg>

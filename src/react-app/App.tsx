@@ -36,9 +36,21 @@ function Icon({ name, size = 20 }: { name: IconName; size?: number }) {
 function Logo({ light = false }: { light?: boolean }) {
   return (
     <a className={`logo ${light ? 'logo--light' : ''}`} href="#top" aria-label="Avallen home">
-      <svg viewBox="0 0 42 42" aria-hidden="true"><path d="M7 30C12 14 25 8 35 11c-2 12-10 23-25 22" /><path d="M11 31c6-8 12-13 21-17" /></svg>
-      <span>Avallen</span>
+      <img src={light ? '/logo-light.svg' : '/logo.svg'} alt="Avallen" />
     </a>
+  )
+}
+
+function LeafMark() {
+  return (
+    <svg viewBox="0 0 40 40" aria-hidden="true">
+      <g fill="none" stroke="currentColor" strokeWidth="1.7">
+        <path d="M20 21 C12 17 5 18 3 27 C12 30 18 27 20 21 Z" fill="currentColor" stroke="none" />
+        <path d="M20 21 C28 17 35 18 37 27 C28 30 22 27 20 21 Z" fill="currentColor" stroke="none" />
+        <circle cx="20" cy="20" r="3" fill="currentColor" stroke="none" />
+        <path d="M7 18 A14 14 0 0 1 33 14" strokeDasharray="0.5 4" strokeLinecap="round" />
+      </g>
+    </svg>
   )
 }
 
@@ -129,7 +141,7 @@ function App() {
 
         <section className="intro-section" id="about">
           <div className="shell intro-grid">
-            <p className="section-number">01 — WHY MOVEWELL</p>
+            <p className="section-number">01 — WHY AVALLEN</p>
             <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>Avallen is designed to bring the practical parts together—quietly, beautifully, and without getting between you and your students.</p></div>
           </div>
         </section>
@@ -139,6 +151,24 @@ function App() {
             <div className="section-heading"><div><p className="eyebrow eyebrow--light">Everything in one place</p><h2>Run your teaching business.<br /><em>Keep it feeling human.</em></h2></div><p>Simple tools that take care of the work around your classes, while leaving you fully in control.</p></div>
             <div className="feature-grid">
               {teacherFeatures.map((feature, index) => <article className="feature-card" key={feature.title}><div className="feature-card__top"><span><Icon name={feature.icon} /></span><small>0{index + 1}</small></div><h3>{feature.title}</h3><p>{feature.text}</p></article>)}
+            </div>
+          </div>
+        </section>
+
+        <section className="matrix-section">
+          <div className="shell">
+            <div className="section-heading section-heading--dark"><div><p className="eyebrow">A closer look</p><h2>Everything that comes<br /><em>inside.</em></h2></div><p>No add-on marketplace, no tiered feature gates. The whole toolkit, in one place.</p></div>
+            <div className="matrix-grid">
+              {([
+                ['Plan & run', ['Recurring classes & one-off sessions', 'Retreats with deposits & split payments', 'Venues, photos & private-location handling', 'Registers, student notes & attendance']],
+                ['Book & get paid', ['Card payments paid straight to you via Stripe', 'Class packs & bundles students can buy ahead', 'Automatic waitlists when classes fill', 'Refunds & cancellation policies built in']],
+                ['Grow & connect', ['Your own public page — avallen.studio/you', 'Students discover you on search & map', 'Familiar faces, milestones & reconnect nudges', 'Referral tracking & revenue insights at a glance']],
+              ]).map(([col, items]) => (
+                <div className="matrix-col" key={col as string}>
+                  <h3>{col}</h3>
+                  <ul>{(items as string[]).map(item => <li key={item}><span><Icon name="check" size={13} /></span>{item}</li>)}</ul>
+                </div>
+              ))}
             </div>
           </div>
         </section>
@@ -170,21 +200,37 @@ function App() {
         </section>
 
         <section className="quote-section">
-          <div className="shell quote-inner"><span className="quote-mark">“</span><blockquote>We believe the best technology should feel less like software—and more like having a little more space in your day.</blockquote><p>THE THINKING BEHIND MOVEWELL</p></div>
+          <div className="shell quote-inner"><span className="quote-mark">“</span><blockquote>Most software is aimed at gyms, this genuinely looks like it’s built to help instructors grow their business, and I’m excited about it</blockquote><div className="quote-attrib"><span className="quote-avatar"><Icon name="spark" size={15} /></span><p>BETA INSTRUCTOR</p></div></div>
+        </section>
+
+        <section className="founder-section">
+          <div className="shell founder-grid">
+            <div className="founder-photo" aria-label="Portrait of Rob Foster, founder of Avallen">
+              <span className="founder-photo__monogram">RF</span>
+              <div className="founder-photo__badge"><span><LeafMark /></span></div>
+            </div>
+            <div className="founder-copy">
+              <p className="section-number">03 — MADE BY A PERSON, NOT A PLATFORM</p>
+              <h2>Built by someone who<br /><em>gets the work.</em></h2>
+              <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom—each feature is shaped around how small teaching businesses actually run.</p>
+              <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
+              <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello — hello@avallen.studio <Icon name="arrow" size={16} /></a>
+            </div>
+          </div>
         </section>
 
         <section className="faq-section" id="faq">
-          <div className="shell faq-grid"><div><p className="section-number">03 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
+          <div className="shell faq-grid"><div><p className="section-number">04 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
         </section>
 
         <section className="coming-section" id="coming-soon">
           <div className="coming-shape coming-shape--one" /><div className="coming-shape coming-shape--two" />
-          <div className="shell coming-inner"><div className="app-mark"><svg viewBox="0 0 42 42"><path d="M7 30C12 14 25 8 35 11c-2 12-10 23-25 22" /><path d="M11 31c6-8 12-13 21-17" /></svg></div><p className="eyebrow eyebrow--light">A calmer way to run your practice</p><h2>Move with purpose.<br /><em>Teach freely.</em></h2><p>Avallen is coming soon to the App Store.<br />We can’t wait to share it with you.</p><div className="store-badge"><span>●</span><div><small>COMING SOON ON THE</small><strong>App Store</strong></div></div></div>
+          <div className="shell coming-inner"><div className="app-mark"><LeafMark /></div><p className="eyebrow eyebrow--light">A calmer way to run your practice</p><h2>Move with purpose.<br /><em>Teach freely.</em></h2><p>Avallen is coming soon to the App Store.<br />We can’t wait to share it with you.</p><div className="store-badge"><span>●</span><div><small>COMING SOON ON THE</small><strong>App Store</strong></div></div></div>
         </section>
       </main>
 
       <footer>
-        <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="#coming-soon">Launch updates</a></div></div></div>
+        <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="#coming-soon">Launch updates</a></div><div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div></div></div>
         <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
       </footer>
     </div>
