@@ -101,6 +101,8 @@ function App() {
   const [claimEmail, setClaimEmail] = useState('')
   const [claimPhone, setClaimPhone] = useState('')
   const [claimCompany, setClaimCompany] = useState('') // honeypot
+  const [disciplines, setDisciplines] = useState<string[]>([])
+  const [pickedDiscs, setPickedDiscs] = useState<string[]>([])
   const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
   const [modalItems, setModalItems] = useState<string[] | null>(null) // missing-field modal
   const checkTimer = useRef<number | undefined>(undefined)
@@ -143,6 +145,17 @@ function App() {
 
   const closeModal = () => { setModalItems(null); submitRef.current?.focus() }
 
+  // Discipline choices come from the API - same list as instructor signup.
+  useEffect(() => {
+    fetch(`${API_BASE}/disciplines`)
+      .then(r => r.ok ? r.json() : [])
+      .then((rows: { name: string }[]) => setDisciplines(rows.map(r => r.name)))
+      .catch(() => {}) // chips just don't render if the API's down
+  }, [])
+
+  const toggleDisc = (d: string) =>
+    setPickedDiscs(cur => cur.includes(d) ? cur.filter(x => x !== d) : [...cur, d])
+
   const submitClaim = async (e: React.FormEvent) => {
     e.preventDefault()
     if (claim.state === 'submitting') return
@@ -152,6 +165,7 @@ function App() {
     if (!claimName.trim()) missing.push('your name')
     if (!claimEmail.trim()) missing.push('an email address')
     else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(claimEmail.trim())) missing.push('a valid email address')
+    if (disciplines.length && !pickedDiscs.length) missing.push('at least one discipline you teach')
     if (!handle) missing.push('the handle you’d like')
     else if (avail === 'invalid') missing.push('a handle of 3+ letters, numbers or hyphens')
     else if (avail === 'taken') missing.push('a handle that’s still free — try another')
@@ -162,7 +176,7 @@ function App() {
       const res = await fetch(`${API_BASE}/handle-claims`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: claimName, email: claimEmail, handle, phone: claimPhone || undefined, company: claimCompany }),
+        body: JSON.stringify({ name: claimName, email: claimEmail, handle, disciplines: pickedDiscs, phone: claimPhone || undefined, company: claimCompany }),
       })
       if (res.ok) {
         setClaim({ state: 'done', message: '' })
@@ -324,6 +338,16 @@ function App() {
                       {avail === 'invalid' && '3+ chars: a-z, 0-9, -'}
                     </span>
                   </div>
+                  {disciplines.length > 0 && (
+                    <div className="disc-row" role="group" aria-label="What do you teach?">
+                      <p className="disc-row__label">What do you teach?</p>
+                      <div className="disc-row__chips">
+                        {disciplines.map(d => (
+                          <button type="button" key={d} className={`disc-chip ${pickedDiscs.includes(d) ? 'disc-chip--on' : ''}`} aria-pressed={pickedDiscs.includes(d)} onClick={() => toggleDisc(d)}>{d}</button>
+                        ))}
+                      </div>
+                    </div>
+                  )}
                   <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
                   <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
                   <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />

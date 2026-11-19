@@ -175,6 +175,11 @@ h2 { font-size: clamp(46px, 5vw, 68px); line-height: 1.04; }
 .url-field__status--free { color: #5c8a64; }
 .url-field__status--taken, .url-field__status--invalid, .reserve-form__error { color: #b3532f; }
 .url-field--error .url-field input { border-bottom-color: #c96f4c; }
+.disc-row__label { margin: 0 0 8px; color: #8b938c; font-size: 12px; font-weight: 600; }
+.disc-row__chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.disc-chip { min-height: 38px; padding: 0 16px; border: 1.5px solid #dcd9d0; border-radius: 100px; color: #5a685e; background: transparent; font-family: inherit; font-size: 13px; font-weight: 600; cursor: pointer; transition: border-color .2s, background .2s, color .2s; }
+.disc-chip:hover { border-color: var(--terracotta); }
+.disc-chip--on { border-color: var(--terracotta); color: white; background: var(--terracotta); }
 .reserve-form__hint { margin: -4px 0 0; color: #8b938c; font-size: 11px; line-height: 1.6; font-style: italic; }
 .reserve-form__error { margin: 0; font-size: 12px; font-weight: 600; }
 .reserve-form .pill { align-self: flex-start; border: 0; cursor: pointer; font-family: inherit; }
