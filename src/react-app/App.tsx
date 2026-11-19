@@ -119,7 +119,8 @@ function App() {
     checkTimer.current = window.setTimeout(async () => {
       try {
         const res = await fetch(`${API_BASE}/handles/${handle}`)
-        setAvail(res.status === 404 ? 'free' : 'taken')
+        // 200 = taken, 404 = free; anything else (429/5xx) is unknown - don't block the submit
+        setAvail(res.status === 404 ? 'free' : res.ok ? 'taken' : 'idle')
       } catch {
         setAvail('idle') // offline/API down - the submit still validates server-side
       }
@@ -282,7 +283,7 @@ function App() {
                   <p><b>avallen.studio/{handle}</b> is reserved for you.<br />We’ll be in touch as soon as we launch.</p>
                 </div>
               ) : (
-                <form className="reserve-form" onSubmit={submitClaim} noValidate>
+                <form className="reserve-form" onSubmit={submitClaim}>
                   <label className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
                     <span className="url-field__prefix">avallen.studio/</span>
                     <input
