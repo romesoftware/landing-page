@@ -365,8 +365,8 @@ function App() {
 
         <section className="founder-section">
           <div className="shell founder-grid">
-            <div className="founder-photo" aria-label="Portrait of Rob Foster, founder of Avallen">
-              <span className="founder-photo__monogram">RF</span>
+            <div className="founder-photo">
+              <img src="/rf-founder-image.png" alt="Rob Foster, founder of Avallen" />
               <div className="founder-photo__badge"><span><BrandMark light /></span></div>
             </div>
             <div className="founder-copy">
