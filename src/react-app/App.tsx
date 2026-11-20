@@ -373,6 +373,23 @@ function App() {
           </div>
         </section>
 
+        <section className="desktop-section">
+          <div className="shell desktop-grid">
+            <div className="desktop-copy">
+              <p className="eyebrow">Desktop, too</p>
+              <h2>Bookings that work<br /><em>beautifully on a laptop.</em></h2>
+              <p>Your public page isn't just for phones. Students browsing from a desktop get the same calm layout — your profile, classes, venues and dates side by side, ready to book in a couple of clicks.</p>
+              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw" target="_blank" rel="noreferrer">See a live page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
+            </div>
+            <div className="desktop-shot">
+              <div className="desktop-frame">
+                <div className="desktop-frame__bar"><span /><span /><span /><em>avallen.studio/mia-shaw</em></div>
+                <img src="/mia-desktop.png" alt="Mia Shaw's Avallen page on desktop: profile card with her photo and bio, upcoming Breathwork Circle classes with dates and a Book button, and the Islington Wellness Centre venue card" />
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="quote-section">
           <div className="shell quote-inner"><span className="quote-mark">“</span><blockquote>Most software is aimed at gyms, this genuinely looks like it’s built to help instructors grow their business, and I’m excited about it</blockquote><div className="quote-attrib"><span className="quote-avatar"><Icon name="spark" size={15} /></span><p>BETA INSTRUCTOR</p></div></div>
         </section>
