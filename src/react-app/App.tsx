@@ -460,7 +460,7 @@ function App() {
 
       <footer>
         <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="#coming-soon">Launch updates</a></div><div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div></div></div>
-        <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
+        <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen — a product of Rome Software Limited. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
       </footer>
     </div>
   )
