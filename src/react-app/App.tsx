@@ -94,55 +94,10 @@ const storyScreens = [
   { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress — quietly organised in the background.' },
 ]
 
-function StoryScreen({ id, on }: { id: string; on: boolean }) {
+function StoryScreen({ id, tab, on }: { id: string; tab: string; on: boolean }) {
   return (
-    <div className={`story-screen story-screen--${id} ${on ? 'is-on' : ''}`} aria-hidden={!on}>
-      {id === 'teaching' && (
-        <>
-          <div className="ss-hello"><small>MONDAY, MAY 12</small><h4>Good morning, Maya.</h4></div>
-          <div className="ss-rev"><small>THIS WEEK</small><strong>£1,240</strong><span>+18% vs last week</span>
-            <div className="ss-spark">{[38, 55, 30, 70, 52, 88, 64].map(h => <i key={h} style={{ height: `${h}%` }} />)}</div>
-          </div>
-          <div className="ss-tiles"><div><small>AVG. CLASS FILL</small><strong>82%</strong></div><div><small>RETURNING</small><strong>34</strong></div></div>
-          <div className="ss-row"><span><b>Slow Sunday Flow</b><small>Tomorrow · 9:30 · 12 booked</small></span><i>›</i></div>
-          <div className="ss-row"><span><b>Power Pilates</b><small>Tue · 6:00pm · Waitlist 3</small></span><i>›</i></div>
-        </>
-      )}
-      {id === 'discover' && (
-        <>
-          <h4 className="ss-title">Discover</h4>
-          <div className="ss-search"><Icon name="discover" size={9} />Search teachers, classes…</div>
-          <div className="ss-chips"><span className="on">All</span><span>Yoga</span><span>Pilates</span><span>Nearby</span></div>
-          {[['Sunrise Yoga Flow', 'Wild Bloom Studio', '£12', '6 left'], ['Core Pilates', 'Evoke', '£14', '3 left']].map(([n, v, p, s]) => (
-            <div className="ss-class" key={n}><div className="ss-class__img" /><span><strong>{n}</strong><small>{v} · {s} spaces</small></span><b>{p}</b></div>
-          ))}
-        </>
-      )}
-      {id === 'favourites' && (
-        <>
-          <h4 className="ss-title">Favourites</h4>
-          {[['MB', 'Maya Bloom', 'Yoga · Tue 6pm'], ['RT', 'Rob Turner', 'Pilates · Sat 9am'], ['AL', 'Ana Lopez', 'Yoga · Sun 10am']].map(([ini, n, d]) => (
-            <div className="ss-fav" key={n}><span className="ss-fav__ava">{ini}</span><span><strong>{n}</strong><small>{d}</small></span><Icon name="heart" size={10} /></div>
-          ))}
-          <p className="ss-note">3 saved teachers · 2 saved classes</p>
-        </>
-      )}
-      {id === 'bookings' && (
-        <>
-          <h4 className="ss-title">Bookings</h4>
-          <div className="ss-book"><span className="ss-book__date"><b>18</b><small>SAT</small></span><span><strong>Slow Sunday Flow</strong><small>9:30am · Wild Bloom Studio</small></span><em>Checked in</em></div>
-          <div className="ss-book"><span className="ss-book__date"><b>21</b><small>TUE</small></span><span><strong>Core Pilates</strong><small>6:00pm · Evoke</small></span><em>Booked</em></div>
-          <div className="ss-offline"><Icon name="check" size={9} />Works offline — no signal needed</div>
-        </>
-      )}
-      {id === 'profile' && (
-        <>
-          <div className="ss-profile"><span className="ss-profile__ava">MR</span><div><strong>Maya Reyes</strong><small>maya@example.com</small></div></div>
-          {[['My packs', '2 active'], ['Payments', ''], ['Preferences', ''], ['My progress', '']].map(([l, v]) => (
-            <div className="ss-prow" key={l}><span>{l}</span><small>{v}</small><i>›</i></div>
-          ))}
-        </>
-      )}
+    <div className={`story-screen ${on ? 'is-on' : ''}`} aria-hidden={!on}>
+      <img className="story-shot" src={`/story/${id}.png`} alt={`Avallen app — ${tab} screen`} loading="lazy" />
     </div>
   )
 }
@@ -192,12 +147,7 @@ function ScrollStory() {
           <div className="phone story-phone" aria-label="The Avallen app, cycling through its main screens">
             <div className="phone__bar"><span>9:41</span><i /><span>•••</span></div>
             <div className="story-screens">
-              {storyScreens.map((s, i) => <StoryScreen key={s.id} id={s.id} on={active === i} />)}
-            </div>
-            <div className="story-tabs">
-              {storyScreens.map((s, i) => (
-                <span key={s.id} className={active === i ? 'is-on' : ''}><Icon name={s.icon} size={11} />{s.tab}</span>
-              ))}
+              {storyScreens.map((s, i) => <StoryScreen key={s.id} id={s.id} tab={s.tab} on={active === i} />)}
             </div>
           </div>
         </div>
