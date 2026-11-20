@@ -86,6 +86,126 @@ function PhoneMockup() {
   )
 }
 
+const storyScreens = [
+  { id: 'teaching',   tab: 'Teaching',   icon: 'trend' as IconName,    eyebrow: 'Teaching',   title: 'Your studio insights, at hand', copy: 'Revenue, class fill and returning students — the numbers that matter, on one calm dashboard.' },
+  { id: 'discover',   tab: 'Discover',   icon: 'discover' as IconName, eyebrow: 'Discover',   title: 'Every teacher, a tap away', copy: 'Students browse local independent teachers, check real availability and book in seconds.' },
+  { id: 'favourites', tab: 'Favourites', icon: 'heart' as IconName,    eyebrow: 'Favourites', title: 'The teachers they love, kept close', copy: 'One tap saves a teacher or a class — so your regulars are never far away.' },
+  { id: 'bookings',   tab: 'Bookings',   icon: 'calendar' as IconName, eyebrow: 'Bookings',   title: 'Bookings that work offline', copy: 'Tickets, addresses and check-in codes live on the phone — even in a basement studio with no signal.' },
+  { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress — quietly organised in the background.' },
+]
+
+function StoryScreen({ id, on }: { id: string; on: boolean }) {
+  return (
+    <div className={`story-screen story-screen--${id} ${on ? 'is-on' : ''}`} aria-hidden={!on}>
+      {id === 'teaching' && (
+        <>
+          <div className="ss-hello"><small>MONDAY, MAY 12</small><h4>Good morning, Maya.</h4></div>
+          <div className="ss-rev"><small>THIS WEEK</small><strong>£1,240</strong><span>+18% vs last week</span>
+            <div className="ss-spark">{[38, 55, 30, 70, 52, 88, 64].map(h => <i key={h} style={{ height: `${h}%` }} />)}</div>
+          </div>
+          <div className="ss-tiles"><div><small>AVG. CLASS FILL</small><strong>82%</strong></div><div><small>RETURNING</small><strong>34</strong></div></div>
+          <div className="ss-row"><span><b>Slow Sunday Flow</b><small>Tomorrow · 9:30 · 12 booked</small></span><i>›</i></div>
+          <div className="ss-row"><span><b>Power Pilates</b><small>Tue · 6:00pm · Waitlist 3</small></span><i>›</i></div>
+        </>
+      )}
+      {id === 'discover' && (
+        <>
+          <h4 className="ss-title">Discover</h4>
+          <div className="ss-search"><Icon name="discover" size={9} />Search teachers, classes…</div>
+          <div className="ss-chips"><span className="on">All</span><span>Yoga</span><span>Pilates</span><span>Nearby</span></div>
+          {[['Sunrise Yoga Flow', 'Wild Bloom Studio', '£12', '6 left'], ['Core Pilates', 'Evoke', '£14', '3 left']].map(([n, v, p, s]) => (
+            <div className="ss-class" key={n}><div className="ss-class__img" /><span><strong>{n}</strong><small>{v} · {s} spaces</small></span><b>{p}</b></div>
+          ))}
+        </>
+      )}
+      {id === 'favourites' && (
+        <>
+          <h4 className="ss-title">Favourites</h4>
+          {[['MB', 'Maya Bloom', 'Yoga · Tue 6pm'], ['RT', 'Rob Turner', 'Pilates · Sat 9am'], ['AL', 'Ana Lopez', 'Yoga · Sun 10am']].map(([ini, n, d]) => (
+            <div className="ss-fav" key={n}><span className="ss-fav__ava">{ini}</span><span><strong>{n}</strong><small>{d}</small></span><Icon name="heart" size={10} /></div>
+          ))}
+          <p className="ss-note">3 saved teachers · 2 saved classes</p>
+        </>
+      )}
+      {id === 'bookings' && (
+        <>
+          <h4 className="ss-title">Bookings</h4>
+          <div className="ss-book"><span className="ss-book__date"><b>18</b><small>SAT</small></span><span><strong>Slow Sunday Flow</strong><small>9:30am · Wild Bloom Studio</small></span><em>Checked in</em></div>
+          <div className="ss-book"><span className="ss-book__date"><b>21</b><small>TUE</small></span><span><strong>Core Pilates</strong><small>6:00pm · Evoke</small></span><em>Booked</em></div>
+          <div className="ss-offline"><Icon name="check" size={9} />Works offline — no signal needed</div>
+        </>
+      )}
+      {id === 'profile' && (
+        <>
+          <div className="ss-profile"><span className="ss-profile__ava">MR</span><div><strong>Maya Reyes</strong><small>maya@example.com</small></div></div>
+          {[['My packs', '2 active'], ['Payments', ''], ['Preferences', ''], ['My progress', '']].map(([l, v]) => (
+            <div className="ss-prow" key={l}><span>{l}</span><small>{v}</small><i>›</i></div>
+          ))}
+        </>
+      )}
+    </div>
+  )
+}
+
+function ScrollStory() {
+  const [active, setActive] = useState(0)
+  const stepsRef = useRef<(HTMLElement | null)[]>([])
+
+  useEffect(() => {
+    let raf = 0
+    const update = () => {
+      raf = 0
+      const mid = window.innerHeight / 2
+      let best = 0, bestDist = Infinity
+      stepsRef.current.forEach((el, i) => {
+        if (!el) return
+        const r = el.getBoundingClientRect()
+        const d = Math.abs(r.top + r.height / 2 - mid)
+        if (d < bestDist) { bestDist = d; best = i }
+      })
+      setActive(best)
+    }
+    const onScroll = () => { if (!raf) raf = requestAnimationFrame(update) }
+    update()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+      if (raf) cancelAnimationFrame(raf)
+    }
+  }, [])
+
+  return (
+    <section className="story-section">
+      <div className="shell story-grid">
+        <div className="story-steps">
+          {storyScreens.map((s, i) => (
+            <div key={s.id} data-step={i} ref={el => { stepsRef.current[i] = el }} className={`story-step ${active === i ? 'is-active' : ''}`}>
+              <p className="eyebrow">{s.eyebrow}</p>
+              <h3>{s.title}</h3>
+              <p>{s.copy}</p>
+            </div>
+          ))}
+        </div>
+        <div className="story-visual">
+          <div className="phone story-phone" aria-label="The Avallen app, cycling through its main screens">
+            <div className="phone__bar"><span>9:41</span><i /><span>•••</span></div>
+            <div className="story-screens">
+              {storyScreens.map((s, i) => <StoryScreen key={s.id} id={s.id} on={active === i} />)}
+            </div>
+            <div className="story-tabs">
+              {storyScreens.map((s, i) => (
+                <span key={s.id} className={active === i ? 'is-on' : ''}><Icon name={s.icon} size={11} />{s.tab}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  )
+}
+
 type Avail = 'idle' | 'checking' | 'free' | 'taken' | 'invalid'
 
 type Claim = { state: 'idle' | 'submitting' | 'done' | 'error'; message: string }
@@ -242,6 +362,8 @@ function App() {
             </div>
           </div>
         </section>
+
+        <ScrollStory />
 
         <section className="matrix-section">
           <div className="shell">
