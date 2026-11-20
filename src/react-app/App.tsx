@@ -74,7 +74,7 @@ const teacherFeatures = [
 const questions = [
   ['Who is Avallen for?', 'Avallen is being built for independent yoga and Pilates instructors—from teachers running a few weekly classes to established practitioners working across several spaces.'],
   ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place.'],
-  ['When will the app be available?', 'Avallen is currently in development and will be coming to the App Store. Launch updates and early access details will be shared here.'],
+  ['When will the app be available?', 'Avallen is currently in beta testing with founding instructors, with a wider launch planned for early 2027. Launch updates and early access details will be shared here.'],
   ['Will it work for both yoga and Pilates?', 'Absolutely. The experience is designed around the real needs of independent yoga and Pilates teaching, with enough flexibility for different class styles and ways of working.'],
 ]
 
@@ -173,6 +173,37 @@ function ScrollStory() {
 type Avail = 'idle' | 'checking' | 'free' | 'taken' | 'invalid'
 
 type Claim = { state: 'idle' | 'submitting' | 'done' | 'error'; message: string }
+
+function GrowthIllustration() {
+  return (
+    <svg className="growth-illustration" viewBox="0 0 1120 260" role="img" aria-label="A growing branch moving from roots to a young tree and then a full canopy">
+      <path className="growth-line growth-line--soft" d="M44 212C150 217 214 216 302 202S469 191 554 177 729 161 807 172 948 181 1070 181" />
+      <path className="growth-line" d="M44 212C150 217 214 216 302 202S469 191 554 177 729 161 807 172 948 181 1070 181" />
+      <g className="growth-stage growth-stage--seed">
+        <path d="M126 210c-9-13-22-18-38-16M126 210c10-11 22-15 37-12M126 210v-48" />
+        <path className="growth-leaf" d="M126 174c-22 0-33-11-34-30 19-1 32 9 34 30Z" />
+        <path className="growth-leaf" d="M126 160c2-18 13-27 30-29 1 17-9 27-30 29Z" />
+      </g>
+      <g className="growth-stage growth-stage--sapling">
+        <path d="M556 177c-7-15-18-22-35-23M556 177c9-12 20-18 34-18M556 177v-105M556 112c-19-8-29-20-33-35M556 125c18-8 30-20 36-36" />
+        <path className="growth-leaf" d="M533 88c-23-2-34-14-33-34 21 0 32 11 33 34Z" />
+        <path className="growth-leaf" d="M578 101c2-22 14-34 35-36 0 21-12 33-35 36Z" />
+        <path className="growth-leaf" d="M556 78c-12-18-10-34 4-48 13 16 12 32-4 48Z" />
+      </g>
+      <g className="growth-stage growth-stage--tree">
+        <path d="M991 96c-1 25 1 54 8 85M998 126c-26-17-42-35-48-55M996 136c27-17 45-38 54-61M978 108c-23-10-40-25-49-43M1018 106c19-12 31-27 37-45" />
+        <path className="growth-leaf" d="M951 79c-28-3-43-18-44-43 26 0 41 14 44 43Z" />
+        <path className="growth-leaf" d="M1041 82c2-27 17-42 43-45 0 25-14 40-43 45Z" />
+        <path className="growth-leaf" d="M985 55c-13-23-9-42 10-57 14 21 11 40-10 57Z" />
+        <path className="growth-leaf growth-leaf--pale" d="M1021 55c7-22 23-33 45-31-5 21-20 32-45 31Z" />
+        <path className="growth-leaf growth-leaf--pale" d="M948 46c-18-14-37-14-55-1 16 15 35 15 55 1Z" />
+      </g>
+      <circle className="growth-dot" cx="126" cy="212" r="5" />
+      <circle className="growth-dot growth-dot--current" cx="556" cy="177" r="8" />
+      <circle className="growth-dot" cx="999" cy="181" r="5" />
+    </svg>
+  )
+}
 
 function App() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -283,12 +314,13 @@ function App() {
             <a href="#for-instructors">For instructors</a>
             <a href="#for-students">For students</a>
             <a href="#about">Our approach</a>
+            <a href="#journey">Our journey</a>
             <a href="#faq">FAQs</a>
           </nav>
           <a className="pill pill--small desktop-cta" href="#coming-soon">Coming soon</a>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}><Icon name={menuOpen ? 'x' : 'menu'} /></button>
         </div>
-        {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation">{[['For instructors', '#for-instructors'], ['For students', '#for-students'], ['Our approach', '#about'], ['FAQs', '#faq']].map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav>}
+        {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation">{[['For instructors', '#for-instructors'], ['For students', '#for-students'], ['Our approach', '#about'], ['Our journey', '#journey'], ['FAQs', '#faq']].map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav>}
       </header>
 
       <main>
@@ -479,8 +511,39 @@ function App() {
           </div>
         )}
 
+        <section className="journey-section" id="journey">
+          <div className="shell">
+            <div className="journey-heading">
+              <div><p className="section-number">05 — OUR JOURNEY</p><h2>Rooted in purpose.<br /><em>Growing with care.</em></h2></div>
+              <p>We’re building Avallen steadily, alongside the people it’s made for. Here’s where we are—and what comes next.</p>
+            </div>
+            <div className="journey-growth" aria-hidden="true"><GrowthIllustration /></div>
+            <div className="journey-stages">
+              <article>
+                <div className="journey-stage__marker"><span>01</span></div>
+                <p className="journey-stage__date">2026</p>
+                <h3>The roots are in</h3>
+                <p>We’ve developed the first version of Avallen, shaped around the real rhythms of independent teaching.</p>
+              </article>
+              <article className="journey-stage--current">
+                <div className="journey-stage__marker"><span>02</span><strong>We are here</strong></div>
+                <p className="journey-stage__date">Now <strong className="journey-here">We are here</strong></p>
+                <h3>Growing together</h3>
+                <p>We’re beta testing and welcoming a small group of founding instructors to help shape what Avallen becomes.</p>
+              </article>
+              <article>
+                <div className="journey-stage__marker"><span>03</span></div>
+                <p className="journey-stage__date">Early 2027</p>
+                <h3>Ready to flourish</h3>
+                <p>Avallen launches for independent instructors and the students looking to move with them.</p>
+              </article>
+            </div>
+            <p className="journey-note"><span />Built slowly enough to listen. Boldly enough to make a difference.</p>
+          </div>
+        </section>
+
         <section className="faq-section" id="faq">
-          <div className="shell faq-grid"><div><p className="section-number">05 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
+          <div className="shell faq-grid"><div><p className="section-number">06 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
         </section>
 
         <section className="coming-section" id="coming-soon">
