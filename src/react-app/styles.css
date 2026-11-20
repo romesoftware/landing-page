@@ -58,7 +58,7 @@ h1 em, h2 em { color: var(--terracotta); font-weight: 400; }
 .phone { overflow: hidden; width: 100%; aspect-ratio: .49; padding: 8px; border: 3px solid #2f302f; border-radius: 37px; background: #191a19; box-shadow: 0 25px 60px rgba(28,36,31,.24); }
 .phone__bar { position: relative; display: flex; height: 24px; align-items: center; justify-content: space-between; padding: 0 13px; border-radius: 27px 27px 0 0; color: #314238; background: #faf9f5; font-size: 7px; font-weight: 700; }
 .phone__bar i { position: absolute; top: 2px; left: 50%; width: 62px; height: 16px; transform: translateX(-50%); border-radius: 12px; background: #191a19; }
-.phone__content { height: calc(100% - 24px); padding: 17px 13px; border-radius: 0 0 27px 27px; color: #26372e; background: #faf9f5; }
+.phone__content { overflow: hidden; height: calc(100% - 24px); padding: 17px 13px; border-radius: 0 0 27px 27px; color: #26372e; background: #faf9f5; }
 .phone__hello { display: flex; justify-content: space-between; }
 .phone small { display: block; font-size: 5px; letter-spacing: .12em; }
 .phone__hello h3 { margin: 4px 0 0; font-family: 'DM Serif Display'; font-size: 20px; font-weight: 400; line-height: .98; }

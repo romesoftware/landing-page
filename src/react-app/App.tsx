@@ -73,7 +73,7 @@ const teacherFeatures = [
 
 const questions = [
   ['Who is Avallen for?', 'Avallen is being built for independent yoga and Pilates instructors—from teachers running a few weekly classes to established practitioners working across several spaces.'],
-  ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place.'],
+  ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place — and teachers can be students too, booking other teachers’ classes with the same account.'],
   ['When will the app be available?', 'Avallen is currently in beta testing with founding instructors, with a wider launch planned for early 2027. Launch updates and early access details will be shared here.'],
   ['Will it work for both yoga and Pilates?', 'Absolutely. The experience is designed around the real needs of independent yoga and Pilates teaching, with enough flexibility for different class styles and ways of working.'],
 ]
@@ -192,6 +192,7 @@ function GrowthIllustration() {
       </g>
       <g className="growth-stage growth-stage--tree">
         <path d="M991 96c-1 25 1 54 8 85M998 126c-26-17-42-35-48-55M996 136c27-17 45-38 54-61M978 108c-23-10-40-25-49-43M1018 106c19-12 31-27 37-45" />
+        <path d="M991 96c-1-14-4-28-6-41M929 65c6-7 13-13 19-19M1055 61c-11-2-22-4-34-6M950 71c0 3 1 5 1 8M1050 75c-3 2-6 5-9 7" />
         <path className="growth-leaf" d="M951 79c-28-3-43-18-44-43 26 0 41 14 44 43Z" />
         <path className="growth-leaf" d="M1041 82c2-27 17-42 43-45 0 25-14 40-43 45Z" />
         <path className="growth-leaf" d="M985 55c-13-23-9-42 10-57 14 21 11 40-10 57Z" />
@@ -437,6 +438,7 @@ function App() {
               <h2>Built by someone who<br /><em>gets the work.</em></h2>
               <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom—each feature is shaped around how small teaching businesses actually run.</p>
               <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
+              <p>The name is Cornish for apple tree — roots that hold, branches that reach. It’s the shape of what we’re building: a community of independent teachers helping each other grow, with a referral network that rewards the people who plant new trees.</p>
               <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello — hello@avallen.studio <Icon name="arrow" size={16} /></a>
             </div>
           </div>
@@ -529,13 +531,13 @@ function App() {
                 <div className="journey-stage__marker"><span>02</span><strong>We are here</strong></div>
                 <p className="journey-stage__date">Now <strong className="journey-here">We are here</strong></p>
                 <h3>Growing together</h3>
-                <p>We’re beta testing and welcoming a small group of founding instructors to help shape what Avallen becomes.</p>
+                <p>We’re beta testing with a small group of founding instructors — free access, in return for honest feedback and real-world use. Founders keep a badge on their profile for good.</p>
               </article>
               <article>
                 <div className="journey-stage__marker"><span>03</span></div>
                 <p className="journey-stage__date">Early 2027</p>
                 <h3>Ready to flourish</h3>
-                <p>Avallen launches for independent instructors and the students looking to move with them.</p>
+                <p>Avallen launches for independent instructors and the students looking to move with them — £12.95 a month, no commissions.</p>
               </article>
             </div>
             <p className="journey-note"><span />Built slowly enough to listen. Boldly enough to make a difference.</p>
