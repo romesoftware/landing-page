@@ -3,29 +3,43 @@ import { useEffect, useRef, useState, type ReactNode } from 'react'
 type IconName =
   | 'arrow'
   | 'calendar'
+  | 'card'
   | 'check'
   | 'chevron'
+  | 'clock'
   | 'discover'
+  | 'doc'
+  | 'globe'
   | 'heart'
   | 'menu'
   | 'message'
   | 'people'
+  | 'pin'
   | 'spark'
+  | 'tag'
   | 'trend'
+  | 'undo'
   | 'x'
 
 const iconPaths: Record<IconName, ReactNode> = {
   arrow: <><path d="M5 12h14" /><path d="m14 7 5 5-5 5" /></>,
   calendar: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M8 3v4M16 3v4M3 10h18" /><path d="m8 15 2 2 5-5" /></>,
+  card: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10h18" /></>,
   check: <path d="m5 12 4 4L19 6" />,
   chevron: <path d="m8 10 4 4 4-4" />,
+  clock: <><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></>,
   discover: <><circle cx="12" cy="12" r="9" /><path d="m15.5 8.5-2.1 4.9-4.9 2.1 2.1-4.9 4.9-2.1Z" /></>,
+  doc: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" /><path d="M14 3v5h5M9 13h6M9 17h4" /></>,
+  globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9S14.5 18.4 12 21c-2.5-2.6-3.9-5.7-3.9-9S9.5 5.6 12 3Z" /></>,
   heart: <path d="M20.8 5.8a5 5 0 0 0-7.1 0L12 7.5l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.1a5 5 0 0 0 0-7.1Z" />,
   menu: <><path d="M4 7h16M4 12h16M4 17h16" /></>,
   message: <><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" /><path d="M8 9h8M8 13h5" /></>,
   people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></>,
+  pin: <><path d="M20 10c0 5.2-8 12-8 12s-8-6.8-8-12a8 8 0 1 1 16 0Z" /><circle cx="12" cy="10" r="3" /></>,
   spark: <><path d="m12 3 1.5 4.5L18 9l-4.5 1.5L12 15l-1.5-4.5L6 9l4.5-1.5L12 3Z" /><path d="m19 15 .8 2.2L22 18l-2.2.8L19 21l-.8-2.2L16 18l2.2-.8L19 15Z" /></>,
+  tag: <><path d="M3 11V4a1 1 0 0 1 1-1h7l10 10-8 8L3 11Z" /><circle cx="7.5" cy="7.5" r="1.5" /></>,
   trend: <><path d="M3 18 9 12l4 4 8-9" /><path d="M15 7h6v6" /></>,
+  undo: <><path d="M9 14 4 9l5-5" /><path d="M4 9h10a6 6 0 0 1 0 12h-3" /></>,
   x: <path d="m6 6 12 12M18 6 6 18" />,
 }
 
@@ -320,13 +334,13 @@ function App() {
             <div className="section-heading section-heading--dark"><div><p className="eyebrow">A closer look</p><h2>The complete<br /><em>toolkit.</em></h2></div><p>No add-on marketplace, no tiered feature gates. The whole toolkit, in one place.</p></div>
             <div className="matrix-grid">
               {([
-                ['Plan & run', ['Recurring classes & one-off sessions', 'Retreats with deposits & split payments', 'Venues, photos & private-location handling', 'Registers, student notes & attendance']],
-                ['Book & get paid', ['Card payments paid straight to you via Stripe', 'Class packs & bundles students can buy ahead', 'Automatic waitlists when classes fill', 'Refunds & cancellation policies built in']],
-                ['Grow & connect', ['Your own public page — avallen.studio/you', 'Students discover you on search & map', 'Familiar faces, milestones & reconnect nudges', 'Referral tracking & revenue insights at a glance']],
+                ['Plan & run', [['Recurring classes & one-off sessions', 'calendar'], ['Retreats with deposits & split payments', 'pin'], ['Venues, photos & private-location handling', 'doc'], ['Registers, student notes & attendance', 'people']]],
+                ['Book & get paid', [['Card payments paid straight to you via Stripe', 'card'], ['Class packs & bundles students can buy ahead', 'tag'], ['Automatic waitlists when classes fill', 'clock'], ['Refunds & cancellation policies built in', 'undo']]],
+                ['Grow & connect', [['Your own public page — avallen.studio/you', 'globe'], ['Students discover you on search & map', 'discover'], ['Familiar faces, milestones & reconnect nudges', 'people'], ['Referral tracking & revenue insights at a glance', 'trend']]],
               ]).map(([col, items]) => (
                 <div className="matrix-col" key={col as string}>
                   <h3>{col}</h3>
-                  <ul>{(items as string[]).map(item => <li key={item}><span><Icon name="check" size={13} /></span>{item}</li>)}</ul>
+                  <ul>{(items as [string, IconName][]).map(([item, icon], i) => <li key={item}><span className={`matrix-ic matrix-ic--${i % 3}`}><Icon name={icon} size={15} /></span>{item}</li>)}</ul>
                 </div>
               ))}
             </div>
