@@ -87,17 +87,17 @@ function PhoneMockup() {
 }
 
 const storyScreens = [
-  { id: 'teaching',   tab: 'Teaching',   icon: 'trend' as IconName,    eyebrow: 'Teaching',   title: 'Your studio insights, at hand', copy: 'Revenue, class fill and returning students — the numbers that matter, on one calm dashboard.' },
-  { id: 'discover',   tab: 'Discover',   icon: 'discover' as IconName, eyebrow: 'Discover',   title: 'Every teacher, a tap away', copy: 'Students browse local independent teachers, check real availability and book in seconds.' },
-  { id: 'favourites', tab: 'Favourites', icon: 'heart' as IconName,    eyebrow: 'Favourites', title: 'The teachers they love, kept close', copy: 'One tap saves a teacher or a class — so your regulars are never far away.' },
-  { id: 'bookings',   tab: 'Bookings',   icon: 'calendar' as IconName, eyebrow: 'Bookings',   title: 'Bookings that work offline', copy: 'Tickets, addresses and check-in codes live on the phone — even in a basement studio with no signal.' },
-  { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress — quietly organised in the background.' },
+  { id: 'teaching',   tab: 'Teaching',   icon: 'trend' as IconName,    eyebrow: 'Teaching',   title: 'Your studio insights, at hand', copy: 'Revenue, class fill and returning students — the numbers that matter, on one calm dashboard.', shotAlt: 'Avallen app Teaching screen: greeting, public-page share card, studio revenue card with sparkline, and class-fill and returning-student tiles' },
+  { id: 'discover',   tab: 'Discover',   icon: 'discover' as IconName, eyebrow: 'Discover',   title: 'Every teacher, a tap away', copy: 'Students browse local independent teachers, check real availability and book in seconds.', shotAlt: 'Avallen app Discover screen: search bar, featured teacher cards with photos and prices, and a local-teachers rail' },
+  { id: 'favourites', tab: 'Favourites', icon: 'heart' as IconName,    eyebrow: 'Favourites', title: 'The teachers they love, kept close', copy: 'One tap saves a teacher or a class — so your regulars are never far away.', shotAlt: 'Avallen app Favourites screen: saved teachers with photos and disciplines, and saved class cards with times and prices' },
+  { id: 'bookings',   tab: 'Bookings',   icon: 'calendar' as IconName, eyebrow: 'Bookings',   title: 'Bookings that work offline', copy: 'Tickets, addresses and check-in codes live on the phone — even in a basement studio with no signal.', shotAlt: 'Avallen app Bookings screen: upcoming booking cards with dates, venues, map links and check-in actions' },
+  { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress — quietly organised in the background.', shotAlt: 'Avallen app Profile screen: account card, personal details, and interest chips for discovery' },
 ]
 
-function StoryScreen({ id, tab, on }: { id: string; tab: string; on: boolean }) {
+function StoryScreen({ id, shotAlt, on }: { id: string; shotAlt: string; on: boolean }) {
   return (
     <div className={`story-screen ${on ? 'is-on' : ''}`} aria-hidden={!on}>
-      <img className="story-shot" src={`/story/${id}.png`} alt={`Avallen app — ${tab} screen`} loading="lazy" />
+      <img className="story-shot" src={`/story/${id}.png`} alt={shotAlt} loading="lazy" />
     </div>
   )
 }
@@ -147,7 +147,7 @@ function ScrollStory() {
           <div className="phone story-phone" aria-label="The Avallen app, cycling through its main screens">
             <div className="phone__bar"><span>9:41</span><i /><span>•••</span></div>
             <div className="story-screens">
-              {storyScreens.map((s, i) => <StoryScreen key={s.id} id={s.id} tab={s.tab} on={active === i} />)}
+              {storyScreens.map((s, i) => <StoryScreen key={s.id} id={s.id} shotAlt={s.shotAlt} on={active === i} />)}
             </div>
           </div>
         </div>
