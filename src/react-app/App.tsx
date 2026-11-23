@@ -252,17 +252,17 @@ function App() {
     return () => window.clearTimeout(checkTimer.current)
   }, [handle])
 
+  const closeModal = () => { setModalItems(null); submitRef.current?.focus() }
+
   // Move focus into the modal when it opens, back to the button when it closes.
   useEffect(() => {
     if (modalItems) {
       modalRef.current?.focus()
-      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setModalItems(null) }
+      const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') closeModal() }
       window.addEventListener('keydown', onKey)
       return () => window.removeEventListener('keydown', onKey)
     }
   }, [modalItems])
-
-  const closeModal = () => { setModalItems(null); submitRef.current?.focus() }
 
   // Discipline choices come from the API - same list as instructor signup.
   useEffect(() => {
