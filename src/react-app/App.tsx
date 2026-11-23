@@ -292,7 +292,8 @@ function App() {
         body: JSON.stringify({ name: claimName, email: claimEmail, company: claimCompany }),
       })
       if (res.ok) {
-        setInterest({ state: 'done', message: '' })
+        const data = await res.json().catch(() => ({}))
+        setInterest({ state: 'done', message: (data as { already?: boolean }).already ? 'already' : '' })
       } else {
         const data = await res.json().catch(() => ({}))
         setInterest({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong — try again' })
@@ -492,8 +493,10 @@ function App() {
                 interest.state === 'done' ? (
                   <div className="reserve-done" role="status">
                     <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
-                    <h3>You’re on the list.</h3>
-                    <p>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</p>
+                    <h3>{interest.message === 'already' ? 'You’re already on the list.' : 'You’re on the list.'}</h3>
+                    <p>{interest.message === 'already'
+                      ? <>We’ve already got <b>{claimEmail}</b> — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
+                      : <>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</>}</p>
                   </div>
                 ) : (
                   <form className="reserve-form" onSubmit={submitInterest} noValidate>
