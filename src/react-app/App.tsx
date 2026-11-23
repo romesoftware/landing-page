@@ -495,7 +495,7 @@ function App() {
                     <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
                     <h3>{interest.message === 'already' ? 'You’re already on the list.' : 'You’re on the list.'}</h3>
                     <p>{interest.message === 'already'
-                      ? <>We’ve already got <b>{claimEmail}</b> — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
+                      ? <>You’ve already left your details — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
                       : <>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</>}</p>
                   </div>
                 ) : (
