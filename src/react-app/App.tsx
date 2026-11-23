@@ -216,7 +216,6 @@ function App() {
   const [claimName, setClaimName] = useState('')
   const [claimEmail, setClaimEmail] = useState('')
   const [claimPhone, setClaimPhone] = useState('')
-  const [claimCompany, setClaimCompany] = useState('') // honeypot
   const [disciplines, setDisciplines] = useState<string[]>([])
   const [pickedDiscs, setPickedDiscs] = useState<string[]>([])
   const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
@@ -289,7 +288,7 @@ function App() {
       const res = await fetch(`${API_BASE}/interest`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: claimName, email: claimEmail, company: claimCompany }),
+        body: JSON.stringify({ name: claimName, email: claimEmail }),
       })
       if (res.ok) {
         const data = await res.json().catch(() => ({}))
@@ -323,7 +322,7 @@ function App() {
       const res = await fetch(`${API_BASE}/handle-claims`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name: claimName, email: claimEmail, handle, disciplines: pickedDiscs, phone: claimPhone || undefined, company: claimCompany }),
+        body: JSON.stringify({ name: claimName, email: claimEmail, handle, disciplines: pickedDiscs, phone: claimPhone || undefined }),
       })
       if (res.ok) {
         setClaim({ state: 'done', message: '' })
@@ -503,7 +502,6 @@ function App() {
                     <p className="interest-note">Piqued your interest but not quite ready to pick a handle? Leave your details and we’ll email you the moment we launch.</p>
                     <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
                     <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
-                    <input type="text" name="promo" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
                     {interest.state === 'error' && <p className="reserve-form__error" role="alert">{interest.message}</p>}
                     <button className="pill" type="submit" ref={submitRef} disabled={interest.state === 'submitting'}>
                       {interest.state === 'submitting' ? 'Sending…' : 'Keep me posted'} <Icon name="arrow" size={18} />
@@ -546,7 +544,6 @@ function App() {
                   <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
                   <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
                   <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
-                  <input type="text" name="promo" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
                   {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
                   <button className="pill" type="submit" ref={submitRef} disabled={claim.state === 'submitting'}>
                     {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
