@@ -443,7 +443,7 @@ function App() {
               <p className="eyebrow">Desktop, too</p>
               <h2>Bookings that work<br /><em>beautifully on a laptop.</em></h2>
               <p>Your public page isn't just for phones. Students browsing from a desktop get the same calm layout — your profile, classes, venues and dates side by side, ready to book in a couple of clicks.</p>
-              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw?from=https://avallen.studio" target="_blank" rel="noreferrer">See a live page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
+              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw?from=https://avallen.studio" target="_blank" rel="noreferrer">View a demo page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
             </div>
             <div className="desktop-shot">
               <div className="desktop-frame">
