@@ -220,6 +220,9 @@ function App() {
   const [disciplines, setDisciplines] = useState<string[]>([])
   const [pickedDiscs, setPickedDiscs] = useState<string[]>([])
   const [claim, setClaim] = useState<Claim>({ state: 'idle', message: '' })
+  // "Keep me posted" - interest without committing to a handle
+  const [mode, setMode] = useState<'reserve' | 'interest'>('reserve')
+  const [interest, setInterest] = useState<Claim>({ state: 'idle', message: '' })
   const [modalItems, setModalItems] = useState<string[] | null>(null) // missing-field modal
   const checkTimer = useRef<number | undefined>(undefined)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -271,6 +274,33 @@ function App() {
 
   const toggleDisc = (d: string) =>
     setPickedDiscs(cur => cur.includes(d) ? cur.filter(x => x !== d) : [...cur, d])
+
+  const submitInterest = async (e: React.FormEvent) => {
+    e.preventDefault()
+    if (interest.state === 'submitting') return
+    const missing: string[] = []
+    if (!claimName.trim()) missing.push('your name')
+    if (!claimEmail.trim()) missing.push('an email address')
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(claimEmail.trim())) missing.push('a valid email address')
+    if (missing.length) { setModalItems(missing); return }
+
+    setInterest({ state: 'submitting', message: '' })
+    try {
+      const res = await fetch(`${API_BASE}/interest`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ name: claimName, email: claimEmail, company: claimCompany }),
+      })
+      if (res.ok) {
+        setInterest({ state: 'done', message: '' })
+      } else {
+        const data = await res.json().catch(() => ({}))
+        setInterest({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong — try again' })
+      }
+    } catch {
+      setInterest({ state: 'error', message: 'Could not reach the server — try again in a moment' })
+    }
+  }
 
   const submitClaim = async (e: React.FormEvent) => {
     e.preventDefault()
@@ -412,7 +442,7 @@ function App() {
               <p className="eyebrow">Desktop, too</p>
               <h2>Bookings that work<br /><em>beautifully on a laptop.</em></h2>
               <p>Your public page isn't just for phones. Students browsing from a desktop get the same calm layout — your profile, classes, venues and dates side by side, ready to book in a couple of clicks.</p>
-              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw" target="_blank" rel="noreferrer">See a live page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
+              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw?from=https://avallen.studio" target="_blank" rel="noreferrer">See a live page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
             </div>
             <div className="desktop-shot">
               <div className="desktop-frame">
@@ -453,7 +483,31 @@ function App() {
                 <p>Every teacher gets a public page at <b>avallen.studio/you</b> — searchable, shareable, and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
                 <p>Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
               </div>
-              {claim.state === 'done' ? (
+              <div className="reserve-forms">
+              <div className="reserve-tabs" role="group" aria-label="Claim your spot">
+                <button type="button" aria-pressed={mode === 'reserve'} className={`reserve-tab${mode === 'reserve' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('reserve')}>Reserve your URL</button>
+                <button type="button" aria-pressed={mode === 'interest'} className={`reserve-tab${mode === 'interest' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('interest')}>Keep me posted</button>
+              </div>
+              {mode === 'interest' ? (
+                interest.state === 'done' ? (
+                  <div className="reserve-done" role="status">
+                    <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
+                    <h3>You’re on the list.</h3>
+                    <p>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</p>
+                  </div>
+                ) : (
+                  <form className="reserve-form" onSubmit={submitInterest} noValidate>
+                    <p className="interest-note">Piqued your interest but not quite ready to pick a handle? Leave your details and we’ll email you the moment we launch.</p>
+                    <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
+                    <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
+                    <input type="text" name="company" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
+                    {interest.state === 'error' && <p className="reserve-form__error" role="alert">{interest.message}</p>}
+                    <button className="pill" type="submit" ref={submitRef} disabled={interest.state === 'submitting'}>
+                      {interest.state === 'submitting' ? 'Sending…' : 'Keep me posted'} <Icon name="arrow" size={18} />
+                    </button>
+                  </form>
+                )
+              ) : claim.state === 'done' ? (
                 <div className="reserve-done" role="status">
                   <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
                   <h3>You’re on the list.</h3>
@@ -496,6 +550,7 @@ function App() {
                   </button>
                 </form>
               )}
+              </div>
             </div>
           </div>
         </section>
