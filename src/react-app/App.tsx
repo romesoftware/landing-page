@@ -484,9 +484,9 @@ function App() {
                 <p>Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
               </div>
               <div className="reserve-forms">
-              <div className="reserve-tabs" role="tablist" aria-label="Claim your spot">
-                <button type="button" role="tab" aria-selected={mode === 'reserve'} className={`reserve-tab${mode === 'reserve' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('reserve')}>Reserve your URL</button>
-                <button type="button" role="tab" aria-selected={mode === 'interest'} className={`reserve-tab${mode === 'interest' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('interest')}>Keep me posted</button>
+              <div className="reserve-tabs" role="group" aria-label="Claim your spot">
+                <button type="button" aria-pressed={mode === 'reserve'} className={`reserve-tab${mode === 'reserve' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('reserve')}>Reserve your URL</button>
+                <button type="button" aria-pressed={mode === 'interest'} className={`reserve-tab${mode === 'interest' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('interest')}>Keep me posted</button>
               </div>
               {mode === 'interest' ? (
                 interest.state === 'done' ? (
@@ -502,7 +502,7 @@ function App() {
                     <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
                     <input type="text" name="company" value={claimCompany} onChange={e => setClaimCompany(e.target.value)} tabIndex={-1} autoComplete="off" className="honeypot" aria-hidden="true" />
                     {interest.state === 'error' && <p className="reserve-form__error" role="alert">{interest.message}</p>}
-                    <button className="pill" type="submit" disabled={interest.state === 'submitting'}>
+                    <button className="pill" type="submit" ref={submitRef} disabled={interest.state === 'submitting'}>
                       {interest.state === 'submitting' ? 'Sending…' : 'Keep me posted'} <Icon name="arrow" size={18} />
                     </button>
                   </form>
