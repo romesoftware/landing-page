@@ -321,6 +321,10 @@ function App() {
     e.preventDefault()
     if (claim.state === 'submitting') return
 
+    // Enter in the handle field while collapsed = "continue", not submit —
+    // otherwise it would open the missing-fields dialog for hidden inputs.
+    if (!expanded) { setForceExpand(true); return }
+
     // Polite modal for anything missing, instead of browser tooltips.
     const missing: string[] = []
     if (!claimName.trim()) missing.push('your name')
