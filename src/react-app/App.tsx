@@ -511,20 +511,31 @@ function App() {
 
         <ScrollStory />
 
-        <section className="matrix-section">
+        <section className="toolkit-section" id="toolkit">
+          <div className="toolkit-shape toolkit-shape--one" /><div className="toolkit-shape toolkit-shape--two" />
           <div className="shell">
-            <div className="section-heading section-heading--dark"><div><p className="eyebrow">A closer look</p><h2>The complete<br /><em>toolkit.</em></h2></div><p>No add-on marketplace, no tiered feature gates. The whole toolkit, in one place.</p></div>
-            <div className="matrix-grid">
-              {([
-                ['Plan & run', [['Recurring classes & one-off sessions', 'calendar'], ['Retreats with deposits & split payments', 'pin'], ['Venues, photos & private-location handling', 'doc'], ['Registers, student notes & attendance', 'people']]],
-                ['Book & get paid', [['Card payments paid straight to you via Stripe', 'card'], ['Class packs & bundles students can buy ahead', 'tag'], ['Automatic waitlists when classes fill', 'clock'], ['Refunds & cancellation policies built in', 'undo']]],
-                ['Grow & connect', [['Your own public page — avallen.studio/you', 'globe'], ['Students discover you on search & map', 'discover'], ['Familiar faces, milestones & reconnect nudges', 'people'], ['Referral tracking & revenue insights at a glance', 'trend']]],
-              ]).map(([col, items]) => (
-                <div className="matrix-col" key={col as string}>
-                  <h3>{col}</h3>
-                  <ul>{(items as [string, IconName][]).map(([item, icon], i) => <li key={item}><span className={`matrix-ic matrix-ic--${i % 3}`}><Icon name={icon} size={15} /></span>{item}</li>)}</ul>
-                </div>
+            <div className="toolkit-heading">
+              <div><p className="eyebrow">A closer look</p><h2>The complete<br /><em>teaching toolkit.</em></h2></div>
+              <div className="toolkit-heading__aside"><span>15 thoughtfully chosen essentials</span><p>No add-on maze or scattered systems. Just the tools that help you plan, welcome, teach and grow — in one calm place.</p></div>
+            </div>
+            <div className="toolkit-grid">
+              {toolkitGroups.map((group, groupIndex) => (
+                <article className={`toolkit-card toolkit-card--${groupIndex + 1}`} key={group.title}>
+                  <div className="toolkit-card__top">
+                    <span><Icon name={group.icon} size={21} /></span>
+                    <small>0{groupIndex + 1}</small>
+                  </div>
+                  <h3>{group.title}</h3>
+                  <p>{group.intro}</p>
+                  <ul>
+                    {group.features.map(feature => <li key={feature}><i><Icon name="check" size={12} /></i><span>{feature}</span></li>)}
+                  </ul>
+                </article>
               ))}
+            </div>
+            <div className="toolkit-footer">
+              <p><span><Icon name="spark" size={15} /></span><strong>And the quiet details behind them</strong> — notifications, preferences, secure documents, calendar links and more.</p>
+              <a className="text-link text-link--dark" href="/features">Explore every feature <Icon name="arrow" size={16} /></a>
             </div>
           </div>
         </section>
@@ -700,6 +711,45 @@ const studioFeatures: { title: string; icon: IconName }[] = [
   { title: 'A theme that feels like your studio', icon: 'spark' },
   { title: 'Deeper reports for the whole venue', icon: 'trend' },
   { title: 'More than one studio per account', icon: 'building' },
+]
+
+const toolkitGroups: { icon: IconName; title: string; intro: string; features: string[] }[] = [
+  {
+    icon: 'calendar',
+    title: 'Plan & teach',
+    intro: 'Everything around the class, held together.',
+    features: [
+      'Recurring classes and one-off sessions',
+      'Multiple venues, remote classes and private locations',
+      'Live registers and student check-in',
+      'Health notes, waivers and class documents',
+      'Reminders and messages for everyone booked',
+    ],
+  },
+  {
+    icon: 'layers',
+    title: 'Book & get paid',
+    intro: 'A smoother path from finding a class to joining it.',
+    features: [
+      'Guest-friendly card booking through Stripe',
+      'Class packs and monthly credit plans',
+      'Automatic waitlists when classes fill',
+      'Clear cancellation policies and refunds',
+      'Simple, all-in pricing shown before checkout',
+    ],
+  },
+  {
+    icon: 'trend',
+    title: 'Grow & connect',
+    intro: 'Useful ways to be found—and remembered.',
+    features: [
+      'Your own beautiful public teaching page',
+      'Discovery by practice, teacher and location',
+      'Shareable class links and QR codes',
+      'Student profiles, milestones and thoughtful nudges',
+      'Page views, booking trends and referral insights',
+    ],
+  },
 ]
 
 export default App
