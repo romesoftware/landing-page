@@ -80,6 +80,7 @@ const questions = [
   ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place — and teachers can be students too, booking other teachers’ classes with the same account.'],
   ['When will the app be available?', 'Avallen is currently in beta testing with founding instructors, with a wider launch planned for early 2027. Launch updates and early access details will be shared here.'],
   ['Will it work for both yoga and Pilates?', 'Absolutely. The experience is designed around the real needs of independent yoga and Pilates teaching, with enough flexibility for different class styles and ways of working.'],
+  ['Does it work for studios?', 'Yes — a studio version for venues with several instructors, rooms and front-of-house staff is in early access. It’s set up with us personally, so get in touch and we’ll talk it through.'],
 ]
 
 function PhoneMockup() {
