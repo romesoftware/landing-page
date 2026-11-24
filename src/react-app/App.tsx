@@ -386,7 +386,7 @@ function App() {
             <div className="hero__copy reveal">
               <p className="eyebrow">Made for independent movement teachers</p>
               <h1>Your practice,<br /><em>beautifully</em> organised.</h1>
-              <p className="hero__intro">Avallen brings your classes, bookings and community into one calm place, so you can spend less time on admin and more time teaching.</p>
+              <p className="hero__intro">Avallen is the app that brings your classes, bookings and community into one calm place, so you can spend less time on admin and more time teaching.</p>
               <div className="hero__actions"><a className="pill" href="#for-instructors">See what’s inside <Icon name="arrow" size={18} /></a><a className="text-link" href="#for-students">I’m looking for a class <Icon name="arrow" size={16} /></a></div>
               <div className="launch-note"><span><Icon name="spark" size={15} /></span><p><strong>Thoughtfully in the making.</strong><br />Coming soon to the App Store.</p></div>
             </div>
@@ -496,7 +496,7 @@ function App() {
         <section className="intro-section" id="about">
           <div className="shell intro-grid">
             <p className="section-number">02 — WHY AVALLEN</p>
-            <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>Avallen is designed to bring the practical parts together, quietly and beautifully, without ever getting between you and your students.</p></div>
+            <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>The Avallen app is designed to bring the practical parts together, quietly and beautifully, without ever getting between you and your students.</p></div>
           </div>
         </section>
 
