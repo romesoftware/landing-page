@@ -9,8 +9,10 @@ type IconName =
   | 'clock'
   | 'discover'
   | 'doc'
+  | 'building'
   | 'globe'
   | 'heart'
+  | 'layers'
   | 'menu'
   | 'message'
   | 'people'
@@ -23,6 +25,7 @@ type IconName =
 
 const iconPaths: Record<IconName, ReactNode> = {
   arrow: <><path d="M5 12h14" /><path d="m14 7 5 5-5 5" /></>,
+  building: <><path d="M4 21h16M6 21V7l6-3 6 3v14" /><path d="M9 10h1M14 10h1M9 14h1M14 14h1M10 21v-3h4v3" /></>,
   calendar: <><rect x="3" y="5" width="18" height="16" rx="3" /><path d="M8 3v4M16 3v4M3 10h18" /><path d="m8 15 2 2 5-5" /></>,
   card: <><rect x="3" y="6" width="18" height="13" rx="2" /><path d="M3 10h18" /></>,
   check: <path d="m5 12 4 4L19 6" />,
@@ -32,6 +35,7 @@ const iconPaths: Record<IconName, ReactNode> = {
   doc: <><path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8Z" /><path d="M14 3v5h5M9 13h6M9 17h4" /></>,
   globe: <><circle cx="12" cy="12" r="9" /><path d="M3 12h18M12 3c2.5 2.6 3.9 5.7 3.9 9S14.5 18.4 12 21c-2.5-2.6-3.9-5.7-3.9-9S9.5 5.6 12 3Z" /></>,
   heart: <path d="M20.8 5.8a5 5 0 0 0-7.1 0L12 7.5l-1.7-1.7a5 5 0 0 0-7.1 7.1L12 21l8.8-8.1a5 5 0 0 0 0-7.1Z" />,
+  layers: <><rect x="4" y="5" width="16" height="11" rx="2" /><path d="M8 20h8M12 16v4M8 9h8" /></>,
   menu: <><path d="M4 7h16M4 12h16M4 17h16" /></>,
   message: <><path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4Z" /><path d="M8 9h8M8 13h5" /></>,
   people: <><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" /><circle cx="9" cy="7" r="4" /><path d="M22 21v-2a4 4 0 0 0-3-3.9M16 3.1a4 4 0 0 1 0 7.8" /></>,
@@ -633,26 +637,38 @@ function App() {
         </section>
 
         <section className="studio-section" id="studios">
-          <div className="shell studio-grid">
+          <div className="studio-orb studio-orb--one" /><div className="studio-orb studio-orb--two" />
+          <div className="shell studio-layout">
             <div className="studio-copy">
               <p className="section-number">06 — FOR STUDIOS</p>
               <h2>Manage a studio?<br /><em>We can help there too.</em></h2>
               <p>Alongside the app for independent teachers, we’re shaping a studio version for venues with several instructors, rooms and front-of-house staff — set up with us personally, around how you already work.</p>
-              <a className="text-link text-link--dark" href="mailto:hello@avallen.studio?subject=Avallen%20for%20studios">Tell us about your studio <Icon name="arrow" size={16} /></a>
+              <a className="text-link" href="mailto:hello@avallen.studio?subject=Avallen%20for%20studios">Tell us about your studio <Icon name="arrow" size={16} /></a>
             </div>
-            <div className="studio-card">
-              <p className="studio-card__label">THE STUDIO VERSION, IN EARLY ACCESS</p>
-              <ul>
-                {([
-                  ['Several instructors under one roof', 'people'],
-                  ['Multi-user access for your team', 'card'],
-                  ['Bookable resources — rooms for hire', 'pin'],
-                  ['Embed your timetable on your own website', 'globe'],
-                  ['Theme it to match your studio', 'spark'],
-                  ['Deeper reports for the whole venue', 'trend'],
-                  ['More than one studio on your account', 'tag'],
-                ] as [string, IconName][]).map(([item, icon], i) => <li key={item}><span className={`matrix-ic matrix-ic--${i % 3}`}><Icon name={icon} size={15} /></span>{item}</li>)}
-              </ul>
+            <div className="studio-card-wrap">
+              <span className="studio-card-shadow" aria-hidden="true" />
+              <div className="studio-card">
+                <div className="studio-card__header">
+                  <div>
+                    <p>THE STUDIO EDITION</p>
+                    <h3>One calm home for the whole team.</h3>
+                  </div>
+                  <span>Early access</span>
+                </div>
+                <div className="studio-feature-grid">
+                  {studioFeatures.map((feature, index) => (
+                    <article className={index === 0 ? 'studio-feature studio-feature--lead' : 'studio-feature'} key={feature.title}>
+                      <span className="studio-feature__icon"><Icon name={feature.icon} size={19} /></span>
+                      <div>
+                        <small>0{index + 1}</small>
+                        <h4>{feature.title}</h4>
+                        {index === 0 && <p>Made to grow with your venue, without making it feel less personal.</p>}
+                      </div>
+                    </article>
+                  ))}
+                </div>
+                <div className="studio-card__footer"><span><i /> Shaping now</span><p>Personal setup included</p></div>
+              </div>
             </div>
           </div>
         </section>
@@ -674,5 +690,15 @@ function App() {
     </div>
   )
 }
+
+const studioFeatures: { title: string; icon: IconName }[] = [
+  { title: 'Several instructors under one roof', icon: 'people' },
+  { title: 'Multi-user access for your team', icon: 'layers' },
+  { title: 'Bookable rooms and resources', icon: 'pin' },
+  { title: 'Embed your timetable anywhere', icon: 'globe' },
+  { title: 'A theme that feels like your studio', icon: 'spark' },
+  { title: 'Deeper reports for the whole venue', icon: 'trend' },
+  { title: 'More than one studio per account', icon: 'building' },
+]
 
 export default App
