@@ -69,18 +69,18 @@ const API_BASE = 'https://api.avallen.studio/api'
 const teacherFeatures = [
   { icon: 'calendar' as const, title: 'Classes, without the clutter', text: 'Create one-off sessions or recurring classes, manage spaces and keep your whole schedule in view.' },
   { icon: 'people' as const, title: 'Know your community', text: 'Thoughtful student profiles, registers, notes and milestones help every person feel remembered.' },
-  { icon: 'trend' as const, title: 'Grow with confidence', text: 'See what’s working, fill quiet sessions and reconnect with students—without becoming a marketer.' },
+  { icon: 'trend' as const, title: 'Grow with confidence', text: 'See what’s working, fill quiet sessions and reconnect with students, without becoming a marketer.' },
   { icon: 'message' as const, title: 'Stay in touch, naturally', text: 'Useful reminders and class messages reach the right people at the right moment.' },
   { icon: 'discover' as const, title: 'Be easier to discover', text: 'A beautiful public page makes your approach, classes and locations simple to find and book.' },
   { icon: 'spark' as const, title: 'The details, taken care of', text: 'Packs, policies, documents and waitlists live together, so your energy stays with your teaching.' },
 ]
 
 const questions = [
-  ['Who is Avallen for?', 'Avallen is being built for independent yoga and Pilates instructors—from teachers running a few weekly classes to established practitioners working across several spaces.'],
-  ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place — and teachers can be students too, booking other teachers’ classes with the same account.'],
+  ['Who is Avallen for?', 'Avallen is being built for independent yoga and Pilates instructors, from teachers running a few weekly classes to established practitioners working across several spaces.'],
+  ['Can students use Avallen too?', 'Yes. Students will be able to discover local independent teachers, save favourites, book classes and keep every booking in one calm place. Teachers can be students too, booking other teachers’ classes with the same account.'],
   ['When will the app be available?', 'Avallen is currently in beta testing with founding instructors, with a wider launch planned for early 2027. Launch updates and early access details will be shared here.'],
   ['Will it work for both yoga and Pilates?', 'Absolutely. The experience is designed around the real needs of independent yoga and Pilates teaching, with enough flexibility for different class styles and ways of working.'],
-  ['Does it work for studios?', 'Yes — a studio version for venues with several instructors, rooms and front-of-house staff is in early access. It’s set up with us personally, so get in touch and we’ll talk it through.'],
+  ['Does it work for studios?', 'Yes. A studio version for venues with several instructors, rooms and front-of-house staff is in early access. It’s set up with us personally, so get in touch and we’ll talk it through.'],
 ]
 
 function PhoneMockup() {
@@ -106,11 +106,11 @@ function PhoneMockup() {
 }
 
 const storyScreens = [
-  { id: 'teaching',   tab: 'Teaching',   icon: 'trend' as IconName,    eyebrow: 'Teaching',   title: 'Your studio insights, at hand', copy: 'Revenue, class fill and returning students — the numbers that matter, on one calm dashboard.', shotAlt: 'Avallen app Teaching screen: greeting, public-page share card, studio revenue card with sparkline, and class-fill and returning-student tiles' },
+  { id: 'teaching',   tab: 'Teaching',   icon: 'trend' as IconName,    eyebrow: 'Teaching',   title: 'Your studio insights, at hand', copy: 'Revenue, class fill and returning students: the numbers that matter, on one calm dashboard.', shotAlt: 'Avallen app Teaching screen: greeting, public-page share card, studio revenue card with sparkline, and class-fill and returning-student tiles' },
   { id: 'discover',   tab: 'Discover',   icon: 'discover' as IconName, eyebrow: 'Discover',   title: 'Every teacher, a tap away', copy: 'Students browse local independent teachers, check real availability and book in seconds.', shotAlt: 'Avallen app Discover screen: search bar, featured teacher cards with photos and prices, and a local-teachers rail' },
-  { id: 'favourites', tab: 'Favourites', icon: 'heart' as IconName,    eyebrow: 'Favourites', title: 'The teachers they love, kept close', copy: 'One tap saves a teacher or a class — so your regulars are never far away.', shotAlt: 'Avallen app Favourites screen: saved teachers with photos and disciplines, and saved class cards with times and prices' },
-  { id: 'bookings',   tab: 'Bookings',   icon: 'calendar' as IconName, eyebrow: 'Bookings',   title: 'Bookings that work offline', copy: 'Tickets, addresses and check-in codes live on the phone — even in a basement studio with no signal.', shotAlt: 'Avallen app Bookings screen: upcoming booking cards with dates, venues, map links and check-in actions' },
-  { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress — quietly organised in the background.', shotAlt: 'Avallen app Profile screen: account card, personal details, and interest chips for discovery' },
+  { id: 'favourites', tab: 'Favourites', icon: 'heart' as IconName,    eyebrow: 'Favourites', title: 'The teachers they love, kept close', copy: 'One tap saves a teacher or a class, so your regulars are never far away.', shotAlt: 'Avallen app Favourites screen: saved teachers with photos and disciplines, and saved class cards with times and prices' },
+  { id: 'bookings',   tab: 'Bookings',   icon: 'calendar' as IconName, eyebrow: 'Bookings',   title: 'Bookings that work offline', copy: 'Tickets, addresses and check-in codes live on the phone, even in a basement studio with no signal.', shotAlt: 'Avallen app Bookings screen: upcoming booking cards with dates, venues, map links and check-in actions' },
+  { id: 'profile',    tab: 'Profile',    icon: 'people' as IconName,   eyebrow: 'Profile',    title: 'Everything personal, in one place', copy: 'Packs, payments, preferences and progress, quietly organised in the background.', shotAlt: 'Avallen app Profile screen: account card, personal details, and interest chips for discovery' },
 ]
 
 function StoryScreen({ id, shotAlt, on }: { id: string; shotAlt: string; on: boolean }) {
@@ -315,10 +315,10 @@ function App() {
         setInterest({ state: 'done', message: (data as { already?: boolean }).already ? 'already' : '' })
       } else {
         const data = await res.json().catch(() => ({}))
-        setInterest({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong — try again' })
+        setInterest({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong. Please try again' })
       }
     } catch {
-      setInterest({ state: 'error', message: 'Could not reach the server — try again in a moment' })
+      setInterest({ state: 'error', message: 'Could not reach the server. Try again in a moment' })
     }
   }
 
@@ -338,7 +338,7 @@ function App() {
     if (disciplines.length && !pickedDiscs.length) missing.push('at least one discipline you teach')
     if (!handle) missing.push('the handle you’d like')
     else if (avail === 'invalid') missing.push('a handle of 3+ letters, numbers or hyphens')
-    else if (avail === 'taken') missing.push('a handle that’s still free — try another')
+    else if (avail === 'taken') missing.push('a handle that’s still free. Try another')
     if (missing.length) { setModalItems(missing); return }
 
     setClaim({ state: 'submitting', message: '' })
@@ -353,10 +353,10 @@ function App() {
         setAvail('idle')
       } else {
         const data = await res.json().catch(() => ({}))
-        setClaim({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong — try again' })
+        setClaim({ state: 'error', message: (data as { error?: string }).error ?? 'Something went wrong. Please try again' })
       }
     } catch {
-      setClaim({ state: 'error', message: 'Could not reach the server — try again in a moment' })
+      setClaim({ state: 'error', message: 'Could not reach the server. Try again in a moment' })
     }
   }
 
@@ -386,7 +386,7 @@ function App() {
             <div className="hero__copy reveal">
               <p className="eyebrow">Made for independent movement teachers</p>
               <h1>Your practice,<br /><em>beautifully</em> organised.</h1>
-              <p className="hero__intro">Avallen brings your classes, bookings and community into one calm place—so you can spend less time on admin, and more time teaching.</p>
+              <p className="hero__intro">Avallen brings your classes, bookings and community into one calm place, so you can spend less time on admin and more time teaching.</p>
               <div className="hero__actions"><a className="pill" href="#for-instructors">See what’s inside <Icon name="arrow" size={18} /></a><a className="text-link" href="#for-students">I’m looking for a class <Icon name="arrow" size={16} /></a></div>
               <div className="launch-note"><span><Icon name="spark" size={15} /></span><p><strong>Thoughtfully in the making.</strong><br />Coming soon to the App Store.</p></div>
             </div>
@@ -405,8 +405,8 @@ function App() {
               <div className="reserve-copy">
                 <p className="section-number">01 — CLAIM YOUR SPOT</p>
                 <h2>Reserve your<br /><em>URL now.</em></h2>
-                <p>Every teacher gets a public page at <b>avallen.studio/you</b> — searchable, shareable, and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
-                <p>It’s <b>free for teachers</b> at launch — no subscription, no card. Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
+                <p>Every teacher gets a public page at <b>avallen.studio/you</b> that’s searchable, shareable and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
+                <p>It’s <b>free for teachers</b> at launch. No subscription, no card. Leave your details and we’ll hold it for you, then reach out the moment we launch.</p>
               </div>
               <div className="reserve-forms">
               <div className="reserve-tabs" role="group" aria-label="Claim your spot">
@@ -419,7 +419,7 @@ function App() {
                     <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
                     <h3>{interest.message === 'already' ? 'You’re already on the list.' : 'You’re on the list.'}</h3>
                     <p>{interest.message === 'already'
-                      ? <>You’ve already left your details — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
+                      ? <>You’ve already left your details. We’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
                       : <>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</>}</p>
                   </div>
                 ) : (
@@ -458,7 +458,7 @@ function App() {
                   {avail === 'free' && (
                     <p className="avail-banner" role="status">
                       <Icon name="check" size={15} />
-                      <span><b>avallen.studio/{handle}</b> is free — and it’s <b>free for teachers</b>. Grab it before someone else does.</span>
+                      <span><b>avallen.studio/{handle}</b> is free, and it’s <b>free for teachers</b> too. Grab it before someone else does.</span>
                     </p>
                   )}
                   <div className={`reserve-extra${expanded ? ' reserve-extra--open' : ''}`}>
@@ -476,7 +476,7 @@ function App() {
                       <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
                       <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
                       <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
-                      <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
+                      <p className="reserve-form__hint">A mobile number would be amazing too, please. It makes it much easier for us to reach you when we launch.</p>
                       {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
                       <button className="pill" type="submit" ref={submitRef} disabled={claim.state === 'submitting'}>
                         {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
@@ -496,7 +496,7 @@ function App() {
         <section className="intro-section" id="about">
           <div className="shell intro-grid">
             <p className="section-number">02 — WHY AVALLEN</p>
-            <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>Avallen is designed to bring the practical parts together—quietly, beautifully, and without getting between you and your students.</p></div>
+            <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>Avallen is designed to bring the practical parts together, quietly and beautifully, without ever getting between you and your students.</p></div>
           </div>
         </section>
 
@@ -516,7 +516,7 @@ function App() {
           <div className="shell">
             <div className="toolkit-heading">
               <div><p className="eyebrow">A closer look</p><h2>The complete<br /><em>teaching toolkit.</em></h2></div>
-              <div className="toolkit-heading__aside"><span>15 thoughtfully chosen essentials</span><p>No add-on maze or scattered systems. Just the tools that help you plan, welcome, teach and grow — in one calm place.</p></div>
+              <div className="toolkit-heading__aside"><span>15 thoughtfully chosen essentials</span><p>No add-on maze or scattered systems. Just the tools that help you plan, welcome, teach and grow, all in one calm place.</p></div>
             </div>
             <div className="toolkit-grid">
               {toolkitGroups.map((group, groupIndex) => (
@@ -534,7 +534,7 @@ function App() {
               ))}
             </div>
             <div className="toolkit-footer">
-              <p><span><Icon name="spark" size={15} /></span><strong>And the quiet details behind them</strong> — notifications, preferences, secure documents, calendar links and more.</p>
+              <p><span><Icon name="spark" size={15} /></span><strong>And the quiet details behind them:</strong> notifications, preferences, secure documents, calendar links and more.</p>
               <a className="text-link text-link--dark" href="/features">Explore every feature <Icon name="arrow" size={16} /></a>
             </div>
           </div>
@@ -560,7 +560,7 @@ function App() {
             <div className="student-layout">
               <div className="class-card"><div className="class-card__image"><img src="https://images.unsplash.com/photo-1651077920873-ac1be1b82290?auto=format&fit=crop&w=1000&q=88" alt="A small independent yoga class" /><button aria-label="Save class"><Icon name="heart" size={19} /></button><span>4 spots left</span></div><div className="class-card__body"><small>VINYASA FLOW</small><div><h3>Slow Sunday Flow</h3><strong>£18</strong></div><p>with Maya Chen · Wild Bloom Studio</p><hr /><p><b>Sun, 9:30 AM</b> · 60 min · 0.8 mi</p></div></div>
               <div className="student-benefits">
-                {[['01', 'Discover local, independent teachers', 'Search by practice, place and time—not by who has the biggest marketing budget.'], ['02', 'Book without the back-and-forth', 'Clear class details, simple booking and everything you need before you arrive.'], ['03', 'Return to what you love', 'Save favourites, see your upcoming bookings and build a practice that lasts.']].map(([num, title, text]) => <article key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
+                {[['01', 'Discover local, independent teachers', 'Search by practice, place and time, not by who has the biggest marketing budget.'], ['02', 'Book without the back-and-forth', 'Clear class details, simple booking and everything you need before you arrive.'], ['03', 'Return to what you love', 'Save favourites, see your upcoming bookings and build a practice that lasts.']].map(([num, title, text]) => <article key={num}><span>{num}</span><div><h3>{title}</h3><p>{text}</p></div></article>)}
               </div>
             </div>
           </div>
@@ -571,8 +571,8 @@ function App() {
             <div className="desktop-copy">
               <p className="eyebrow">Desktop, too</p>
               <h2>Bookings that work<br /><em>beautifully on a laptop.</em></h2>
-              <p>Your public page isn't just for phones. Students browsing from a desktop get the same calm layout — your profile, classes, venues and dates side by side, ready to book in a couple of clicks.</p>
-              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw?from=https://avallen.studio" target="_blank" rel="noreferrer">View a demo page — avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
+              <p>Your public page isn't just for phones. Students browsing from a desktop get the same calm layout: your profile, classes, venues and dates side by side, ready to book in a couple of clicks.</p>
+              <a className="text-link text-link--dark" href="https://avallen.studio/mia-shaw?from=https://avallen.studio" target="_blank" rel="noreferrer">View a demo page at avallen.studio/mia-shaw <Icon name="arrow" size={16} /></a>
             </div>
             <div className="desktop-shot">
               <div className="desktop-frame">
@@ -596,10 +596,10 @@ function App() {
             <div className="founder-copy">
               <p className="section-number">04 — MADE BY A PERSON, NOT A PLATFORM</p>
               <h2>Built by someone who<br /><em>gets the work.</em></h2>
-              <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom—each feature is shaped around how small teaching businesses actually run.</p>
+              <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom. Each feature is shaped around how small teaching businesses actually run.</p>
               <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
-              <p>The name is Cornish for apple tree — roots that hold, branches that reach. It’s the shape of what we’re building: a community of independent teachers helping each other grow, with a referral network that rewards the people who plant new trees.</p>
-              <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello — hello@avallen.studio <Icon name="arrow" size={16} /></a>
+              <p>The name is Cornish for apple tree: roots that hold, branches that reach. It’s the shape of what we’re building, a community of independent teachers helping each other grow, with a referral network that rewards the people who plant new trees.</p>
+              <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello at hello@avallen.studio <Icon name="arrow" size={16} /></a>
             </div>
           </div>
         </section>
@@ -621,7 +621,7 @@ function App() {
           <div className="shell">
             <div className="journey-heading">
               <div><p className="section-number">05 — OUR JOURNEY</p><h2>Rooted in purpose.<br /><em>Growing with care.</em></h2></div>
-              <p>We’re building Avallen steadily, alongside the people it’s made for. Here’s where we are—and what comes next.</p>
+              <p>We’re building Avallen steadily, alongside the people it’s made for. Here’s where we are, and what comes next.</p>
             </div>
             <div className="journey-growth" aria-hidden="true"><GrowthIllustration /></div>
             <div className="journey-stages">
@@ -635,13 +635,13 @@ function App() {
                 <div className="journey-stage__marker"><span>02</span><strong>We are here</strong></div>
                 <p className="journey-stage__date">Now <strong className="journey-here">We are here</strong></p>
                 <h3>Growing together</h3>
-                <p>We’re beta testing with a small group of founding instructors — free access, in return for honest feedback and real-world use. Founders keep a badge on their profile for good.</p>
+                <p>We’re beta testing with a small group of founding instructors, who get free access in return for honest feedback and real-world use. Founders keep a badge on their profile for good.</p>
               </article>
               <article>
                 <div className="journey-stage__marker"><span>03</span></div>
                 <p className="journey-stage__date">Early 2027</p>
                 <h3>Ready to flourish</h3>
-                <p>Avallen launches for independent instructors and the students looking to move with them — free for teachers, just a small fee on each student booking.</p>
+                <p>Avallen launches for independent instructors and the students looking to move with them. It’s free for teachers; there’s just a small fee on each student booking.</p>
               </article>
             </div>
             <p className="journey-note"><span />Built slowly enough to listen. Boldly enough to make a difference.</p>
@@ -654,7 +654,7 @@ function App() {
             <div className="studio-copy">
               <p className="section-number">06 — FOR STUDIOS</p>
               <h2>Manage a studio?<br /><em>We can help there too.</em></h2>
-              <p>Alongside the app for independent teachers, we’re shaping a studio version for venues with several instructors, rooms and front-of-house staff — set up with us personally, around how you already work.</p>
+              <p>Alongside the app for independent teachers, we’re shaping a studio version for venues with several instructors, rooms and front-of-house staff. It’s set up with us personally, around how you already work.</p>
               <a className="text-link" href="mailto:hello@avallen.studio?subject=Avallen%20for%20studios">Tell us about your studio <Icon name="arrow" size={16} /></a>
             </div>
             <div className="studio-card-wrap">
@@ -697,7 +697,7 @@ function App() {
 
       <footer>
         <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="/features">Every feature</a><a href="#coming-soon">Launch updates</a></div><div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div></div></div>
-        <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen — a product of Rome Software Limited. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
+        <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen, a product of Rome Software Limited. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
       </footer>
     </div>
   )
@@ -741,7 +741,7 @@ const toolkitGroups: { icon: IconName; title: string; intro: string; features: s
   {
     icon: 'trend',
     title: 'Grow & connect',
-    intro: 'Useful ways to be found—and remembered.',
+    intro: 'Useful ways to be found, and remembered.',
     features: [
       'Your own beautiful public teaching page',
       'Discovery by practice, teacher and location',
