@@ -263,6 +263,13 @@ function App() {
     }
   }, [modalItems])
 
+  // The browser tries to scroll to a #fragment before React has mounted the
+  // sections, so deep links like /#faq land at the top. Re-apply it once mounted.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (id) document.getElementById(id)?.scrollIntoView()
+  }, [])
+
   // Discipline choices come from the API - same list as instructor signup.
   useEffect(() => {
     fetch(`${API_BASE}/disciplines`)
@@ -346,12 +353,13 @@ function App() {
             <a href="#for-students">For students</a>
             <a href="#about">Our approach</a>
             <a href="#journey">Our journey</a>
+            <a href="#studios">For studios</a>
             <a href="#faq">FAQs</a>
           </nav>
           <a className="pill pill--small desktop-cta" href="#coming-soon">Coming soon</a>
           <button className="menu-button" onClick={() => setMenuOpen(!menuOpen)} aria-label={menuOpen ? 'Close menu' : 'Open menu'} aria-expanded={menuOpen}><Icon name={menuOpen ? 'x' : 'menu'} /></button>
         </div>
-        {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation">{[['For instructors', '#for-instructors'], ['For students', '#for-students'], ['Our approach', '#about'], ['Our journey', '#journey'], ['FAQs', '#faq']].map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav>}
+        {menuOpen && <nav className="mobile-nav" aria-label="Mobile navigation">{[['For instructors', '#for-instructors'], ['For students', '#for-students'], ['Our approach', '#about'], ['Our journey', '#journey'], ['For studios', '#studios'], ['FAQs', '#faq']].map(([label, href]) => <a href={href} key={href} onClick={() => setMenuOpen(false)}>{label}</a>)}</nav>}
       </header>
 
       <main>
@@ -592,15 +600,40 @@ function App() {
                 <div className="journey-stage__marker"><span>03</span></div>
                 <p className="journey-stage__date">Early 2027</p>
                 <h3>Ready to flourish</h3>
-                <p>Avallen launches for independent instructors and the students looking to move with them — £12.95 a month, no commissions.</p>
+                <p>Avallen launches for independent instructors and the students looking to move with them — free for teachers, just a small fee on each student booking.</p>
               </article>
             </div>
             <p className="journey-note"><span />Built slowly enough to listen. Boldly enough to make a difference.</p>
           </div>
         </section>
 
+        <section className="studio-section" id="studios">
+          <div className="shell studio-grid">
+            <div className="studio-copy">
+              <p className="section-number">06 — FOR STUDIOS</p>
+              <h2>Manage a studio?<br /><em>We can help there too.</em></h2>
+              <p>Alongside the app for independent teachers, we’re shaping a studio version for venues with several instructors, rooms and front-of-house staff — set up with us personally, around how you already work.</p>
+              <a className="text-link text-link--dark" href="mailto:hello@avallen.studio?subject=Avallen%20for%20studios">Tell us about your studio <Icon name="arrow" size={16} /></a>
+            </div>
+            <div className="studio-card">
+              <p className="studio-card__label">THE STUDIO VERSION, IN EARLY ACCESS</p>
+              <ul>
+                {([
+                  ['Several instructors under one roof', 'people'],
+                  ['Multi-user access for your team', 'card'],
+                  ['Bookable resources — rooms for hire', 'pin'],
+                  ['Embed your timetable on your own website', 'globe'],
+                  ['Theme it to match your studio', 'spark'],
+                  ['Deeper reports for the whole venue', 'trend'],
+                  ['More than one studio on your account', 'tag'],
+                ] as [string, IconName][]).map(([item, icon], i) => <li key={item}><span className={`matrix-ic matrix-ic--${i % 3}`}><Icon name={icon} size={15} /></span>{item}</li>)}
+              </ul>
+            </div>
+          </div>
+        </section>
+
         <section className="faq-section" id="faq">
-          <div className="shell faq-grid"><div><p className="section-number">06 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
+          <div className="shell faq-grid"><div><p className="section-number">07 — GOOD TO KNOW</p><h2>A few questions,<br /><em>answered.</em></h2><p className="faq-intro">Avallen is still growing. Here’s what we can share for now.</p></div><div className="accordions">{questions.map(([question, answer], index) => <article className={openQuestion === index ? 'accordion accordion--open' : 'accordion'} key={question}><button onClick={() => setOpenQuestion(openQuestion === index ? null : index)} aria-expanded={openQuestion === index}><span>{question}</span><i><Icon name="chevron" size={18} /></i></button><div><p>{answer}</p></div></article>)}</div></div>
         </section>
 
         <section className="coming-section" id="coming-soon">
@@ -610,7 +643,7 @@ function App() {
       </main>
 
       <footer>
-        <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="#coming-soon">Launch updates</a></div><div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div></div></div>
+        <div className="shell footer-main"><div><Logo light /><p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p></div><div className="footer-links"><div><small>EXPLORE</small><a href="#for-instructors">For instructors</a><a href="#for-students">For students</a><a href="#about">Our approach</a></div><div><small>INFO</small><a href="#faq">FAQs</a><a href="/features">Every feature</a><a href="#coming-soon">Launch updates</a></div><div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div></div></div>
         <div className="shell footer-bottom"><p>© {new Date().getFullYear()} Avallen — a product of Rome Software Limited. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
       </footer>
     </div>
