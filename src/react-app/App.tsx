@@ -222,6 +222,12 @@ function App() {
   // "Keep me posted" - interest without committing to a handle
   const [mode, setMode] = useState<'reserve' | 'interest'>('reserve')
   const [interest, setInterest] = useState<Claim>({ state: 'idle', message: '' })
+  // Progressive disclosure: the rest of the claim form only unfolds once a
+  // handle checks free (commitment momentum). forceExpand is the escape hatch
+  // for when the availability check can't be reached.
+  const [unlocked, setUnlocked] = useState(false)
+  const [forceExpand, setForceExpand] = useState(false)
+  const expanded = unlocked || forceExpand
   const [modalItems, setModalItems] = useState<string[] | null>(null) // missing-field modal
   const checkTimer = useRef<number | undefined>(undefined)
   const modalRef = useRef<HTMLDivElement>(null)
@@ -250,6 +256,8 @@ function App() {
     }, 400)
     return () => window.clearTimeout(checkTimer.current)
   }, [handle])
+
+  useEffect(() => { if (avail === 'free') setUnlocked(true) }, [avail])
 
   const closeModal = () => { setModalItems(null); submitRef.current?.focus() }
 
@@ -382,9 +390,103 @@ function App() {
           <div className="shell trust-line"><span>BUILT AROUND THE WAY YOU REALLY TEACH</span><i /><p>Yoga</p><i /><p>Pilates</p><i /><p>Your own way</p></div>
         </section>
 
+        <section className="reserve-section" id="reserve">
+          <div className="shell">
+            <div className="reserve-card">
+              <div className="reserve-copy">
+                <p className="section-number">01 — CLAIM YOUR SPOT</p>
+                <h2>Reserve your<br /><em>URL now.</em></h2>
+                <p>Every teacher gets a public page at <b>avallen.studio/you</b> — searchable, shareable, and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
+                <p>It’s <b>free for teachers</b> at launch — no subscription, no card. Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
+              </div>
+              <div className="reserve-forms">
+              <div className="reserve-tabs" role="group" aria-label="Claim your spot">
+                <button type="button" aria-pressed={mode === 'reserve'} className={`reserve-tab${mode === 'reserve' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('reserve')}>Reserve your URL</button>
+                <button type="button" aria-pressed={mode === 'interest'} className={`reserve-tab${mode === 'interest' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('interest')}>Keep me posted</button>
+              </div>
+              {mode === 'interest' ? (
+                interest.state === 'done' ? (
+                  <div className="reserve-done" role="status">
+                    <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
+                    <h3>{interest.message === 'already' ? 'You’re already on the list.' : 'You’re on the list.'}</h3>
+                    <p>{interest.message === 'already'
+                      ? <>You’ve already left your details — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
+                      : <>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</>}</p>
+                  </div>
+                ) : (
+                  <form className="reserve-form" onSubmit={submitInterest} noValidate>
+                    <p className="interest-note">Piqued your interest but not quite ready to pick a handle? Leave your details and we’ll email you the moment we launch.</p>
+                    <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
+                    <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
+                    {interest.state === 'error' && <p className="reserve-form__error" role="alert">{interest.message}</p>}
+                    <button className="pill" type="submit" ref={submitRef} disabled={interest.state === 'submitting'}>
+                      {interest.state === 'submitting' ? 'Sending…' : 'Keep me posted'} <Icon name="arrow" size={18} />
+                    </button>
+                  </form>
+                )
+              ) : claim.state === 'done' ? (
+                <div className="reserve-done" role="status">
+                  <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
+                  <h3>You’re on the list.</h3>
+                  <p><b>avallen.studio/{handle}</b> is reserved for you.<br />We’ll be in touch as soon as we launch.</p>
+                </div>
+              ) : (
+                <form className="reserve-form" onSubmit={submitClaim} noValidate>
+                  <div className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
+                    <span className="url-field__prefix">avallen.studio/</span>
+                    <input
+                      type="text" inputMode="url" autoComplete="off" spellCheck={false}
+                      placeholder="yourname" value={handle} required aria-label="Your handle"
+                      onChange={e => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40))}
+                    />
+                    <span className={`url-field__status url-field__status--${avail}`} aria-live="polite">
+                      {avail === 'checking' && '…'}
+                      {avail === 'free' && <><Icon name="check" size={14} /> available</>}
+                      {avail === 'taken' && <><Icon name="x" size={14} /> taken</>}
+                      {avail === 'invalid' && '3+ chars: a-z, 0-9, -'}
+                    </span>
+                  </div>
+                  {avail === 'free' && (
+                    <p className="avail-banner" role="status">
+                      <Icon name="check" size={15} />
+                      <span><b>avallen.studio/{handle}</b> is free — and it’s <b>free for teachers</b>. Grab it before someone else does.</span>
+                    </p>
+                  )}
+                  <div className={`reserve-extra${expanded ? ' reserve-extra--open' : ''}`}>
+                    <div className="reserve-extra__inner">
+                      {disciplines.length > 0 && (
+                        <div className="disc-row" role="group" aria-label="What do you teach?">
+                          <p className="disc-row__label">What do you teach?</p>
+                          <div className="disc-row__chips">
+                            {disciplines.map(d => (
+                              <button type="button" key={d} className={`disc-chip ${pickedDiscs.includes(d) ? 'disc-chip--on' : ''}`} aria-pressed={pickedDiscs.includes(d)} onClick={() => toggleDisc(d)}>{d}</button>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                      <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
+                      <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
+                      <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
+                      <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
+                      {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
+                      <button className="pill" type="submit" ref={submitRef} disabled={claim.state === 'submitting'}>
+                        {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
+                      </button>
+                    </div>
+                  </div>
+                  {!expanded && handle.length > 0 && avail !== 'free' && (
+                    <button type="button" className="skip-check" onClick={() => setForceExpand(true)}>Continue without checking <Icon name="arrow" size={14} /></button>
+                  )}
+                </form>
+              )}
+              </div>
+            </div>
+          </div>
+        </section>
+
         <section className="intro-section" id="about">
           <div className="shell intro-grid">
-            <p className="section-number">01 — WHY AVALLEN</p>
+            <p className="section-number">02 — WHY AVALLEN</p>
             <div><h2>Teaching is personal.<br /><em>Your tools should be too.</em></h2><p>Independent teaching gives you the freedom to create something meaningful. But the admin can feel scattered across calendars, messages, spreadsheets and booking links.</p><p>Avallen is designed to bring the practical parts together—quietly, beautifully, and without getting between you and your students.</p></div>
           </div>
         </section>
@@ -422,7 +524,7 @@ function App() {
           <div className="shell showcase-grid">
             <div className="showcase-photo"><img src="https://images.unsplash.com/photo-1747239685045-fcbcf98985db?auto=format&fit=crop&w=1200&q=88" alt="Pilates instructor guiding a reformer session" /><div className="photo-caption"><span>Built for movement</span><p>Yoga · Mat Pilates · Reformer</p></div></div>
             <div className="showcase-copy">
-              <p className="section-number">02 — YOUR STUDIO, IN YOUR POCKET</p>
+              <p className="section-number">03 — YOUR STUDIO, IN YOUR POCKET</p>
               <h2>A clearer view of<br /><em>what matters.</em></h2>
               <p>Start the day knowing what’s ahead. See bookings at a glance, welcome familiar faces, and spot the small opportunities that help your practice grow.</p>
               <ul>{['A calm, useful teaching dashboard', 'Registers and student notes when you need them', 'Simple insights without overwhelming reports', 'Helpful nudges, never noisy notifications'].map(item => <li key={item}><span><Icon name="check" size={14} /></span>{item}</li>)}</ul>
@@ -472,93 +574,12 @@ function App() {
               <div className="founder-photo__badge"><span><BrandMark light /></span></div>
             </div>
             <div className="founder-copy">
-              <p className="section-number">03 — MADE BY A PERSON, NOT A PLATFORM</p>
+              <p className="section-number">04 — MADE BY A PERSON, NOT A PLATFORM</p>
               <h2>Built by someone who<br /><em>gets the work.</em></h2>
               <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom—each feature is shaped around how small teaching businesses actually run.</p>
               <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
               <p>The name is Cornish for apple tree — roots that hold, branches that reach. It’s the shape of what we’re building: a community of independent teachers helping each other grow, with a referral network that rewards the people who plant new trees.</p>
               <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello — hello@avallen.studio <Icon name="arrow" size={16} /></a>
-            </div>
-          </div>
-        </section>
-
-        <section className="reserve-section" id="reserve">
-          <div className="shell">
-            <div className="reserve-card">
-              <div className="reserve-copy">
-                <p className="section-number">04 — CLAIM YOUR SPOT</p>
-                <h2>Reserve your<br /><em>URL now.</em></h2>
-                <p>Every teacher gets a public page at <b>avallen.studio/you</b> — searchable, shareable, and unmistakably yours. The good names will go quickly, so grab yours while it’s still there.</p>
-                <p>Leave your details and we’ll hold it for you, and reach out the moment we launch.</p>
-              </div>
-              <div className="reserve-forms">
-              <div className="reserve-tabs" role="group" aria-label="Claim your spot">
-                <button type="button" aria-pressed={mode === 'reserve'} className={`reserve-tab${mode === 'reserve' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('reserve')}>Reserve your URL</button>
-                <button type="button" aria-pressed={mode === 'interest'} className={`reserve-tab${mode === 'interest' ? ' reserve-tab--on' : ''}`} onClick={() => setMode('interest')}>Keep me posted</button>
-              </div>
-              {mode === 'interest' ? (
-                interest.state === 'done' ? (
-                  <div className="reserve-done" role="status">
-                    <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
-                    <h3>{interest.message === 'already' ? 'You’re already on the list.' : 'You’re on the list.'}</h3>
-                    <p>{interest.message === 'already'
-                      ? <>You’ve already left your details — we’ll email you the moment we launch.<br />Your handle will still be there to claim.</>
-                      : <>We’ll let you know as soon as we launch.<br />Your handle will still be there to claim.</>}</p>
-                  </div>
-                ) : (
-                  <form className="reserve-form" onSubmit={submitInterest} noValidate>
-                    <p className="interest-note">Piqued your interest but not quite ready to pick a handle? Leave your details and we’ll email you the moment we launch.</p>
-                    <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
-                    <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
-                    {interest.state === 'error' && <p className="reserve-form__error" role="alert">{interest.message}</p>}
-                    <button className="pill" type="submit" ref={submitRef} disabled={interest.state === 'submitting'}>
-                      {interest.state === 'submitting' ? 'Sending…' : 'Keep me posted'} <Icon name="arrow" size={18} />
-                    </button>
-                  </form>
-                )
-              ) : claim.state === 'done' ? (
-                <div className="reserve-done" role="status">
-                  <span className="reserve-done__icon"><Icon name="check" size={22} /></span>
-                  <h3>You’re on the list.</h3>
-                  <p><b>avallen.studio/{handle}</b> is reserved for you.<br />We’ll be in touch as soon as we launch.</p>
-                </div>
-              ) : (
-                <form className="reserve-form" onSubmit={submitClaim} noValidate>
-                  <div className={`url-field ${avail === 'invalid' ? 'url-field--error' : ''}`}>
-                    <span className="url-field__prefix">avallen.studio/</span>
-                    <input
-                      type="text" inputMode="url" autoComplete="off" spellCheck={false}
-                      placeholder="yourname" value={handle} required aria-label="Your handle"
-                      onChange={e => setHandle(e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '').slice(0, 40))}
-                    />
-                    <span className={`url-field__status url-field__status--${avail}`} aria-live="polite">
-                      {avail === 'checking' && '…'}
-                      {avail === 'free' && <><Icon name="check" size={14} /> available</>}
-                      {avail === 'taken' && <><Icon name="x" size={14} /> taken</>}
-                      {avail === 'invalid' && '3+ chars: a-z, 0-9, -'}
-                    </span>
-                  </div>
-                  {disciplines.length > 0 && (
-                    <div className="disc-row" role="group" aria-label="What do you teach?">
-                      <p className="disc-row__label">What do you teach?</p>
-                      <div className="disc-row__chips">
-                        {disciplines.map(d => (
-                          <button type="button" key={d} className={`disc-chip ${pickedDiscs.includes(d) ? 'disc-chip--on' : ''}`} aria-pressed={pickedDiscs.includes(d)} onClick={() => toggleDisc(d)}>{d}</button>
-                        ))}
-                      </div>
-                    </div>
-                  )}
-                  <input type="text" placeholder="Your name" value={claimName} required onChange={e => setClaimName(e.target.value)} />
-                  <input type="email" placeholder="Email address" value={claimEmail} required onChange={e => setClaimEmail(e.target.value)} />
-                  <input type="tel" placeholder="Mobile number (optional)" value={claimPhone} onChange={e => setClaimPhone(e.target.value)} />
-                  <p className="reserve-form__hint">A mobile number would be amazing too, please — it makes it much easier for us to reach you when we launch.</p>
-                  {claim.state === 'error' && <p className="reserve-form__error" role="alert">{claim.message}</p>}
-                  <button className="pill" type="submit" ref={submitRef} disabled={claim.state === 'submitting'}>
-                    {claim.state === 'submitting' ? 'Reserving…' : 'Reserve my URL'} <Icon name="arrow" size={18} />
-                  </button>
-                </form>
-              )}
-              </div>
             </div>
           </div>
         </section>
