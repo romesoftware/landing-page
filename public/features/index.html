@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Avallen — every feature, in one place</title>
+<meta name="description" content="A shipping inventory of the Avallen booking platform for independent yoga and Pilates teachers — every feature live, none aspirational.">
+<link rel="icon" href="/favicon.png" type="image/png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=DM+Serif+Display:ital@0;1&family=Lora:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --forest:#26372e; --terracotta:#bd684d; --cream:#faf9f5; --sand:#ede8df; --sage:#dfe5d9;
+    --ink-soft:#5b6660; --ink-faint:#8a938c; --line:#dcd9d0; --hairline:#efede6;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--forest); line-height: 1.55; -webkit-font-smoothing: antialiased; }
+  a { color: inherit; text-decoration: none; }
+  .shell { width: min(1180px, calc(100% - 48px)); margin: 0 auto; }
+
+  /* ── header (matches site) ── */
+  .site-header { position: sticky; top: 0; z-index: 20; background: var(--cream); border-bottom: 1px solid var(--hairline); }
+  .header__inner { height: 88px; display: flex; align-items: center; justify-content: space-between; }
+  .logo { display: inline-flex; align-items: center; gap: 11px; }
+  .logo__mark { height: 38px; width: auto; }
+  .logo__word { color: #2b3b47; font-family: 'Lora', Georgia, serif; font-size: 24px; font-weight: 500; letter-spacing: .02em; }
+  .logo--light .logo__word { color: #f7f4ee; }
+  .text-link { display: inline-flex; align-items: center; gap: 9px; padding: 8px 0; border-bottom: 1px solid rgba(38,55,46,.35); font-size: 13px; font-weight: 700; }
+  .text-link:hover { color: var(--terracotta); border-color: var(--terracotta); }
+
+  /* ── hero ── */
+  .hero { padding: 96px 0 54px; }
+  .eyebrow { margin: 0 0 24px; color: var(--terracotta); font-size: 11px; line-height: 1.2; letter-spacing: .2em; font-weight: 700; text-transform: uppercase; }
+  h1, h2 { font-family: 'DM Serif Display', serif; font-weight: 400; letter-spacing: -.035em; }
+  h1 { font-size: clamp(48px, 6vw, 76px); line-height: .98; }
+  h1 em, h2 em { color: var(--terracotta); font-weight: 400; }
+  .hero .lede { max-width: 560px; margin: 26px 0 0; color: #667168; font-size: 17px; line-height: 1.75; }
+  .plans { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 34px; }
+  .plan { display: inline-flex; align-items: baseline; gap: 9px; padding: 13px 22px; border: 1px solid var(--line); border-radius: 14px; background: white; box-shadow: 0 1px 3px rgba(38,55,46,.06); }
+  .plan b { font-family: 'DM Serif Display', serif; font-size: 22px; font-weight: 400; }
+  .plan span { color: var(--ink-faint); font-size: 13px; }
+  .plan .fee { color: var(--terracotta); font-weight: 600; }
+  .plan--studio b { font-size: 16px; }
+
+  /* ── legend ── */
+  .legend { display: flex; flex-wrap: wrap; gap: 16px 22px; align-items: center; margin: 6px 0 44px; color: #667168; font-size: 14px; }
+  .chip { display: inline-block; padding: 3px 11px; border-radius: 999px; font-size: 11px; font-weight: 700; letter-spacing: .05em; text-transform: uppercase; white-space: nowrap; }
+  .chip.t { color: #a9563e; background: #f3e3da; }
+  .chip.s { color: #5f7563; background: #e6ebe2; }
+  .chip.p { color: #8a7a4c; background: #f3ecdb; }
+  .chip.st { color: var(--forest); background: var(--sand); border: 1px solid var(--line); }
+
+  /* ── category sections ── */
+  section { margin-bottom: 44px; }
+  .cat { display: flex; align-items: center; gap: 14px; margin-bottom: 16px; }
+  .cat h2 { font-size: 30px; }
+  .cat .rule { flex: 1; height: 1px; background: var(--line); }
+  .cat .n { padding: 3px 11px; border-radius: 999px; color: var(--ink-faint); background: var(--sand); font-size: 12.5px; font-weight: 600; }
+
+  table { width: 100%; border-collapse: collapse; border: 1px solid var(--line); border-radius: 22px; overflow: hidden; background: white; box-shadow: 0 24px 60px rgba(38,55,46,.07); }
+  th { padding: 14px 20px; border-bottom: 1px solid var(--hairline); background: #faf8f4; color: var(--ink-faint); font-size: 11.5px; font-weight: 700; letter-spacing: .07em; text-align: left; text-transform: uppercase; }
+  th:nth-child(2), td:nth-child(2) { width: 118px; }
+  th:nth-child(3), td:nth-child(3) { width: 92px; text-align: center; }
+  td { padding: 13px 20px; border-bottom: 1px solid var(--hairline); font-size: 15px; vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  tr:nth-child(even) { background: #fbfaf6; }
+  td small { display: block; margin-top: 2px; color: var(--ink-faint); font-size: 12.5px; }
+  .tick { color: var(--terracotta); font-size: 17px; font-weight: 700; }
+  .soon { color: #b39351; font-size: 15px; }
+  .plan-head { color: var(--terracotta) !important; }
+  .studio-note { margin: 12px 0 0; color: #667168; font-size: 14.5px; }
+  .studio-note a { color: var(--terracotta); font-weight: 600; border-bottom: 1px solid rgba(189,104,77,.4); }
+  .studio-note a:hover { border-color: var(--terracotta); }
+
+  /* ── footer (matches site) ── */
+  footer { margin-top: 80px; padding: 70px 0 25px; color: white; background: #1b2822; }
+  .footer-main { display: flex; justify-content: space-between; gap: 55px; }
+  .footer-main > div:first-child > p { margin-top: 20px; color: #849087; line-height: 1.8; }
+  .footer-links { display: flex; flex-wrap: wrap; gap: 100px; }
+  .footer-links > div { display: flex; flex-direction: column; gap: 13px; min-width: 110px; }
+  .footer-links small { margin-bottom: 5px; color: #78867d; font-size: 13px; letter-spacing: .16em; font-weight: 700; }
+  .footer-links a { color: #bcc4be; overflow-wrap: anywhere; }
+  .footer-links a:hover { color: white; }
+  .footer-bottom { display: flex; justify-content: space-between; gap: 20px; margin-top: 70px; padding-top: 22px; border-top: 1px solid rgba(255,255,255,.1); color: #6e7a72; letter-spacing: .06em; }
+  .gen-note { margin-top: 44px; padding-top: 24px; border-top: 1px solid var(--hairline); color: var(--ink-faint); font-size: 13px; text-align: center; }
+  .gen-note b { color: var(--ink-soft); }
+
+  @media (max-width: 880px) {
+    .hero { padding-top: 64px; }
+    .footer-main { flex-direction: column; }
+    .footer-links { gap: 40px; }
+    .footer-bottom { flex-direction: column; }
+    td { padding: 11px 14px; font-size: 14px; }
+    th:nth-child(2), td:nth-child(2) { width: 92px; }
+    th:nth-child(3), td:nth-child(3) { width: 64px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="shell header__inner">
+    <a class="logo" href="/" aria-label="Avallen home">
+      <img class="logo__mark" src="https://avallen.studio/logo.png" alt="" />
+      <span class="logo__word">Avallen</span>
+    </a>
+    <a class="text-link" href="/">Back to the site →</a>
+  </div>
+</header>
+
+<main class="shell">
+
+  <div class="hero">
+    <p class="eyebrow">01 — A shipping inventory, not a roadmap</p>
+    <h1>Every feature,<br /><em>in one place.</em></h1>
+    <p class="lede">Everything below is built and live in the product today. No add-on marketplace, no tiered feature gates — the whole toolkit, included.</p>
+    <div class="plans">
+      <div class="plan"><b>Free</b><span>for teachers at launch</span><span class="fee">small fee on each student booking</span></div>
+      <div class="plan plan--studio"><b>Studio tier</b><span>in early access — set up with us personally</span></div>
+    </div>
+  </div>
+
+  <div class="legend">
+    <span><span class="chip t">Teacher</span> for the people running classes</span>
+    <span><span class="chip s">Student</span> for the people booking them</span>
+    <span><span class="chip p">Platform</span> plumbing you never see</span>
+    <span><span class="chip st">Studio</span> early-access studio tier</span>
+  </div>
+
+  <!-- ═══════════ BOOKING & SCHEDULING ═══════════ -->
+  <section>
+    <div class="cat"><h2>Booking &amp; scheduling</h2><span class="rule"></span><span class="n">16</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Recurring weekly classes (RRULE) with per-class timezones<small>template → materialised sessions; edits don't disturb booked dates</small></td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Per-date session chips with live spaces-left</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Guest or account booking — either way it's keyed to your email</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Signed private booking links for guests</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Booking-clash warnings — can't double-book yourself</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Capacity row-lock — two people can never take the last space</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>15-minute payment hold reserves the space while you pay</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>All-in pricing everywhere (class + fee shown up front — DMCC)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Per-session capacity overrides</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Session cancellation with automatic refunds, student emails &amp; freed waitlist</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Waitlist on full classes + "a spot just opened" alerts (email + push)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Cancel within the teacher's policy — automatic % refund (money or credits)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Add to calendar (.ics on the booking, in the emails, on the class)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Private venues — full address only revealed once you've booked</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Day-before reminder (your chosen lead time) + morning-of in the class's timezone</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Three booking modes per class: platform payment / external provider / listing only</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ PAYMENTS ═══════════ -->
+  <section>
+    <div class="cat"><h2>Payments</h2><span class="rule"></span><span class="n">8</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Teachers connect their own Stripe (Standard Connect OAuth)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Direct charges on the teacher's account — Avallen never holds class money<small>teacher is merchant of record; funds settle in her Stripe</small></td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Small platform fee via Stripe application fee — teacher keeps the rest</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Stripe Payment Element checkout — card details never touch Avallen</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Webhook-confirmed bookings; payment is the source of truth, not the browser</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Auto-refund late payment on a full class + duplicate payments (incl. the fee)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Named cancellation policy sets — a default plus per-class pinning</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>"Taking bookings" live/paused switch on the whole page</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ PACKS & PLANS ═══════════ -->
+  <section>
+    <div class="cat"><h2>Class packs &amp; plans</h2><span class="rule"></span><span class="n">12</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>One-off credit packs (e.g. "5 classes") on the teacher's Stripe</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Monthly credit plans — a real Stripe Subscription, cancel anytime</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Same small-fee-per-credit model — the teacher still nets her full price</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Per-class credit price — a 90-min class can cost more credits</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Pack validity window (never / 3 / 6 / 12 months)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Plan credits refresh monthly; unused ones lapse (use-it-or-lose-it)</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Credits spent inside the capacity row-lock — can't overspend a pack</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Card/credits toggle appears at checkout when you hold credits with that teacher</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Credits always belong to one teacher — shown grouped by teacher</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Full credit ledger — every grant, spend, refund and lapse is auditable</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Teacher manager: create/edit/switch off/remove (pricing locks once sold)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Lifecycle emails &amp; pushes: purchased, monthly grant, plan ended, credits low, teacher sale notice</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ RUNNING YOUR CLASSES ═══════════ -->
+  <section>
+    <div class="cat"><h2>Running your classes</h2><span class="rule"></span><span class="n">11</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Dashboard: fortnight schedule + weekly sessions / bookings / revenue</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Attendance register — tap-to-mark, live per session</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Student check-in QR codes — scanned at the door, works offline</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Waitlist list per session in the class page</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Nudge inbox — running late (per-class opt-in), questions, can't-make-it</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Broadcast to everyone booked on chosen sessions (email + push)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Class form: venue/remote, discipline (API-driven list), level, day/time, length, spaces, price, description, extra info</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Deep links: dashboard card opens the class page on that exact date</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Health notes per booking — only the booked teacher can read them</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Guided onboarding — handle, first venue (Remote seeded), first class</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Page-view stats built in-house (cookieless HMAC visitor id — no consent banner)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ PUBLIC PAGE & MEDIA ═══════════ -->
+  <section>
+    <div class="cat"><h2>Public page, venues &amp; media</h2><span class="rule"></span><span class="n">10</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Public page on a vanity URL — avallen.studio/yourname</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Bio, cover photo, profile photo, custom page address</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Multiple venues + a default Remote/online location</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Google Places address autocomplete + map links</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Photo uploads via Cloudflare Images — browser-resized, direct to storage</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Video via Cloudflare Stream — resumable tus uploads (2 min each, 20 min total)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Media placement: page gallery / per-venue / "not shown" pool</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Photo lightbox with swipe carousel + offline photo-sync queue</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Class share links — deep-links a specific date to a friend</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Copy-link + QR on the teacher's page for sharing anywhere</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ DOCUMENTS & COMPLIANCE ═══════════ -->
+  <section>
+    <div class="cat"><h2>Documents, policies &amp; compliance</h2><span class="rule"></span><span class="n">8</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Waivers &amp; policies uploaded once, attached per class (≤5 MB, private bucket)</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Types: waiver / cancellation / venue policy / health &amp; safety / insurance / terms / other</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Waivers must be ticked at booking — agreement recorded per booking</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Venue-scoped documents — a hall's waiver only applies to classes at that hall</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Show on class details &amp; booking page, and/or link in the confirmation email</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Policy links repeated on the booking health step — right where you're agreeing</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Short-lived signed download links; private bucket, no public URLs</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Health-form data treated as UK GDPR special category — teacher-only reads</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ COMMUNICATION ═══════════ -->
+  <section>
+    <div class="cat"><h2>Communication &amp; notifications</h2><span class="rule"></span><span class="n">9</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Transactional email via Bird — branded Liquid templates</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>15+ lifecycle emails: sign-in codes, confirmations, cancellations, waitlist, nudges, broadcasts, reminders, welcome, pack/plan events</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Web push notifications — self-contained VAPID/RFC 8291, no SDK</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Push for: reminders, waitlist spots, nudges, broadcasts, pack/plan events</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Preference centre — per-channel toggles + reminder lead time</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Dead subscriptions self-clean (404/410 endpoints dropped)</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Student nudges land on the teacher's dashboard, email and push</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Broadcast preview — pick sessions, see ~how many students it reaches</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Sample-data teachers never receive real email</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ DISCOVERY & GROWTH ═══════════ -->
+  <section>
+    <div class="cat"><h2>Discovery &amp; growth</h2><span class="rule"></span><span class="n">7</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Discover page — browse teachers and classes by discipline</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Favourite teachers and classes — synced to your account</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Refer-a-teacher — tracked referrals with first-class marking</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Weekly page stats on the dashboard — views, visitors, referrers, trend</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Guest-friendly funnel — book, waitlist and pay without an account</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Discipline list is API-driven — adding one is a DB row, not a deploy</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Welcome + onboarding emails for new teachers</td><td><span class="chip t">Teacher</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ ACCOUNTS ═══════════ -->
+  <section>
+    <div class="cat"><h2>Accounts &amp; preferences</h2><span class="rule"></span><span class="n">8</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Passwordless sign-in — email one-time code, 30-day sessions</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>One account, two sides — student and teacher roles on the same login</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Deep links survive sign-in — you land back where you were headed</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Guest bookings merge into your account automatically on sign-in</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Terms/privacy versioning + marketing-consent records</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>My packs &amp; plans — balances per teacher, expiry/renewal, plan cancel</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Bookings tab — upcoming/past, amounts paid or credits used, cancel from there</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Per-device push subscriptions — toggle on/off in preferences</td><td><span class="chip s">Student</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ PLATFORM ═══════════ -->
+  <section>
+    <div class="cat"><h2>Platform &amp; operations</h2><span class="rule"></span><span class="n">9</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Avallen</th></tr>
+      <tr><td>Installable PWA — offline shell, works at venues with no signal</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Plain PHP 8 API — no framework, PDO prepared statements throughout</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Per-IP rate limiting on OTP, bookings, uploads, check-ins &amp; more</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Nightly DB backups to a private object-storage bucket (14-day pruning)</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Schema-drift resilience — endpoints degrade instead of 500ing mid-migration</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Central error log + clean JSON errors (no SQL leaks to the client)</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Stripe webhook hardening — idempotent handlers, account-match checks</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>No third-party trackers — cookieless self-built stats only</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+      <tr><td>Seed/sample data tooling for demos, walled off behind a secret</td><td><span class="chip p">Platform</span></td><td><span class="tick">✓</span></td></tr>
+    </table>
+  </section>
+
+  <!-- ═══════════ FOR STUDIOS (early access) ═══════════ -->
+  <section>
+    <div class="cat"><h2>For studios</h2><span class="rule"></span><span class="n">7 · early access</span></div>
+    <table>
+      <tr><th>Feature</th><th>For</th><th class="plan-head">Studio tier</th></tr>
+      <tr><td>Several instructors under one roof</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>Multi-user access — front-of-house and admin logins</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>Bookable resources — rooms for hire</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>Website embed — your timetable on your own site</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>Theme selector — match your studio's look</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>Deeper reports for the whole venue</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+      <tr><td>More than one studio on your account</td><td><span class="chip st">Studio</span></td><td><span class="soon">●</span></td></tr>
+    </table>
+    <p class="studio-note">The studio tier is rolled out personally, one venue at a time — <a href="mailto:hello@avallen.studio?subject=Avallen%20for%20studios">talk to us</a> and we'll shape it around how you already work.</p>
+  </section>
+
+  <p class="gen-note"><b>98 features</b>, shipped and live — plus an early-access studio tier we're building hand-in-hand with founding studios. Generated from the Avallen codebase (API routes, views, migrations, email templates and services); nothing here is aspirational.</p>
+
+</main>
+
+<footer>
+  <div class="shell footer-main">
+    <div>
+      <a class="logo logo--light" href="/" aria-label="Avallen home">
+        <img class="logo__mark" src="https://avallen.studio/logo-light.png" alt="" />
+        <span class="logo__word">Avallen</span>
+      </a>
+      <p>Made thoughtfully for independent<br />yoga and Pilates instructors.</p>
+    </div>
+    <div class="footer-links">
+      <div><small>EXPLORE</small><a href="/#for-instructors">For instructors</a><a href="/#for-students">For students</a><a href="/#studios">For studios</a></div>
+      <div><small>INFO</small><a href="/#faq">FAQs</a><a href="/#coming-soon">Launch updates</a></div>
+      <div><small>CONTACT</small><a href="mailto:hello@avallen.studio">hello@avallen.studio</a><a href="https://app.avallen.studio">Open the app</a></div>
+    </div>
+  </div>
+  <div class="shell footer-bottom"><p>© 2026 Avallen — a product of Rome Software Limited. All rights reserved.</p><p>Move gently. Build steadily.</p></div>
+</footer>
+
+</body>
+</html>
