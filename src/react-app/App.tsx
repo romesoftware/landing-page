@@ -263,6 +263,13 @@ function App() {
     }
   }, [modalItems])
 
+  // The browser tries to scroll to a #fragment before React has mounted the
+  // sections, so deep links like /#faq land at the top. Re-apply it once mounted.
+  useEffect(() => {
+    const id = window.location.hash.slice(1)
+    if (id) document.getElementById(id)?.scrollIntoView()
+  }, [])
+
   // Discipline choices come from the API - same list as instructor signup.
   useEffect(() => {
     fetch(`${API_BASE}/disciplines`)
