@@ -596,9 +596,9 @@ function App() {
             <div className="founder-copy">
               <p className="section-number">04 — MADE BY A PERSON, NOT A PLATFORM</p>
               <h2>Built by someone who<br /><em>gets the work.</em></h2>
-              <p>Avallen is being built by Rob Foster, working directly with independent instructors at every step. No roadmap decided in a boardroom. Each feature is shaped around how small teaching businesses actually run.</p>
+              <p>Avallen is being built by Rob, originally from Cornwall, a seasoned IT leader with over twenty years’ experience in software development, working directly with independent instructors at every step. A roadmap curated by real-world needs, not decided in a boardroom. Each feature is shaped around how small teaching businesses actually run.</p>
               <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
-              <p>The name is Cornish for apple tree: roots that hold, branches that reach. It’s the shape of what we’re building, a community of independent teachers helping each other grow, with a referral network that rewards the people who plant new trees.</p>
+              <p>The name is Cornish for tree, apple tree specifically: roots that hold, branches that reach. It’s the shape of what we’re building, a community of teachers helping each other grow, with a referral network that rewards by planting new trees.</p>
               <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello at hello@avallen.studio <Icon name="arrow" size={16} /></a>
             </div>
           </div>
