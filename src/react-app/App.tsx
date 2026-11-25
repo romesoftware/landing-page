@@ -598,7 +598,7 @@ function App() {
               <h2>Built by someone who<br /><em>gets the work.</em></h2>
               <p>Avallen is being built by Rob, a seasoned IT leader with over twenty years’ experience in software development, originally from Cornwall and working directly with independent instructors at every step. A roadmap curated by real-world needs, not decided in a boardroom. Each feature is shaped around how small teaching businesses actually run.</p>
               <p>Small, considered and built to last. If there’s something you wish your current tools did, we’d genuinely love to hear it.</p>
-              <p>The name is Cornish for tree, apple tree specifically: roots that hold, branches that reach. It’s the shape of what we’re building, a community of teachers helping each other grow, with a referral network that rewards by planting new trees.</p>
+              <p>The word Avallen is Cornish for tree, apple tree specifically: roots that hold, branches that reach. It’s the shape of what we’re building, a community of teachers helping each other grow, with a referral network that rewards by planting new trees.</p>
               <a className="text-link text-link--dark" href="mailto:hello@avallen.studio">Say hello at hello@avallen.studio <Icon name="arrow" size={16} /></a>
             </div>
           </div>
